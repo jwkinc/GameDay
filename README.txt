@@ -1,4 +1,4 @@
-GameDay Live Pro v25
+GameDay Live Pro v26
 
 Feature list:
 - Basketball, baseball, and pickleball scoreboard modes.
@@ -19,13 +19,11 @@ Feature list:
 - Team score pulses for 3.5 seconds when that team scores.
 - Hype buttons: Timeout, Defense, Offense, Slam Dunk, He Is On Fire, Winner.
 - 3 Pointer button auto-triggers the 3 pointer animation.
-- Removed the animation-over-video toggle.
 - Regular animations never display in the bottom video player window.
-- Timeout displays on the large video screen, stops the clock, has a moving background, and remains until the clock starts again.
+- Timeout displays on the large video screen, stops the clock, has a moving background, and clears from both video and clock areas when the clock starts again.
 - Winner auto-triggers when a team reaches the play-to score.
 - Winner displays on the large video screen with moving celebration background until the game is reset.
 - Winner video overlay displays: TEAM NAME WINS! plus final score like 23-54.
-- READY disappears as soon as the game clock starts.
 
 Video note:
 Local videos do not transfer between devices through Firebase. For scoreboard video playback, choose the video on the scoreboard device.
