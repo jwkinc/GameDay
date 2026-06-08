@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v14</title>
+<title>GameDay Live Pro v15</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -52,17 +52,17 @@ radial-gradient(circle at center,#351070,#05070d 70%)}
 .bgMotion{position:absolute;inset:0;pointer-events:none;opacity:.32;background:linear-gradient(115deg,transparent 0 43%,#ffffff22 50%,transparent 57%);animation:sweep 6s linear infinite}
 @keyframes sweep{from{transform:translateX(-90%)}to{transform:translateX(90%)}}
 
-.board{position:relative;height:100vh;width:100vw;padding:8px;display:grid;grid-template-rows:27vh 39vh 30vh;gap:8px}
+.board{position:relative;height:100vh;width:100vw;padding:8px;display:grid;grid-template-rows:36vh 34vh 26vh;gap:8px}
 .glass{border:1px solid color-mix(in srgb,var(--line),transparent 70%);background:linear-gradient(180deg,var(--panel),#00000033);box-shadow:0 16px 42px #0008;backdrop-filter:blur(14px)}
-.topScore{display:grid;grid-template-columns:1.05fr .78fr 1.05fr;gap:8px;min-height:0}
+.topScore{display:grid;grid-template-columns:1.12fr .72fr 1.12fr;gap:8px;min-height:0}
 .team,.score,.center,.stage,.roster{border-radius:18px;min-height:0;overflow:hidden}
-.team{padding:clamp(6px,1vw,12px);display:grid;grid-template-rows:auto 1fr auto;align-items:center;text-align:center}
+.team{position:relative;padding:clamp(8px,1.1vw,14px);display:grid;grid-template-rows:auto 1fr auto;align-items:center;text-align:center}
 .kicker{font-size:clamp(10px,1.35vw,18px);font-weight:1000;letter-spacing:.16em;opacity:.75}
-.name{font-size:clamp(22px,4.2vw,72px);font-weight:1000;line-height:.9;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.name{position:relative;z-index:2;font-size:clamp(30px,5.2vw,92px);font-weight:1000;line-height:.9;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .home{color:var(--home)}
 .away{color:var(--away)}
-.info{font-size:clamp(10px,1.15vw,16px);font-weight:900;margin-top:3px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.score{background:transparent;display:grid;place-items:center;font-size:clamp(74px,13.8vw,210px);font-weight:1000;line-height:.74;text-shadow:0 0 34px currentColor}
+.info{position:relative;z-index:2;font-size:clamp(11px,1.2vw,18px);font-weight:900;margin-top:2px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score{position:relative;z-index:2;background:transparent;display:grid;place-items:center;font-size:clamp(112px,18vw,285px);font-weight:1000;line-height:.72;text-shadow:0 0 34px currentColor}
 .center{background:#000a;display:grid;place-items:center;text-align:center;padding:6px}
 .clock{font-size:clamp(30px,5vw,82px);font-weight:1000;line-height:1}
 .period{font-size:clamp(12px,1.8vw,26px);font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -87,9 +87,9 @@ radial-gradient(circle at center,#351070,#05070d 70%)}
 
 .rosters{display:grid;grid-template-columns:1fr 1fr;gap:8px;min-height:0}
 .roster{background:#0008}
-.roster h2{font-size:clamp(12px,1.7vw,21px);margin:0;padding:7px 10px;border-bottom:1px solid var(--line)}
+.roster h2{font-size:clamp(12px,1.3vw,18px);margin:0;padding:6px 10px;border-bottom:1px solid var(--line)}
 table{width:100%;border-collapse:collapse;table-layout:fixed}
-th,td{padding:6px 9px;border-bottom:1px solid #ffffff0c;font-size:clamp(15px,1.9vw,25px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+th,td{padding:4px 8px;border-bottom:1px solid #ffffff0c;font-size:clamp(11px,1.2vw,16px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 th{opacity:.62;text-align:left;font-size:clamp(10px,1.1vw,15px)}
 th:nth-child(1),td:nth-child(1){width:15%}
 th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4){width:16%;text-align:center}
@@ -147,6 +147,14 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 .adminPanel{text-align:left;margin-top:18px;border:1px solid #ffffff20;border-radius:22px;background:#00000030;padding:16px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
+
+.teamLogoBg{position:absolute;inset:6%;z-index:1;background-repeat:no-repeat;background-position:center;background-size:contain;opacity:.16;filter:grayscale(.1) contrast(1.15);pointer-events:none}
+.roomPills{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.roomPills button{border:1px solid #ffffff22;background:#ffffff10;color:white;border-radius:14px;min-height:52px;font-weight:1000}
+.roomPills button.active{background:linear-gradient(135deg,#ff7a00,#168cff);box-shadow:0 0 22px #168cff55}
+.videoNote{opacity:.72;font-size:14px;line-height:1.35;margin-top:10px}
+@media(max-width:700px){.board{grid-template-rows:36vh 34vh 26vh}.score{font-size:clamp(70px,16vw,140px)}.name{font-size:clamp(20px,5vw,38px)}th,td{font-size:10px;padding:3px 5px}}
+
 </style>
 </head>
 <body>
@@ -156,17 +164,11 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
     <h1 class="logo">GameDay Live</h1>
     <div class="tag">Choose a room, then open the scoreboard or controller.</div>
 
-    <label class="roomLabel">Game Room
-      <input id="quickRoom" list="roomSuggestions" placeholder="Court 1">
-      <datalist id="roomSuggestions">
-        <option value="Court 1"></option>
-        <option value="Court 2"></option>
-        <option value="Main Gym"></option>
-        <option value="Field A"></option>
-        <option value="Field B"></option>
-        <option value="Championship"></option>
-      </datalist>
-    </label>
+    <div class="roomPills">
+      <button id="roomCourt1" onclick="setRoom('Court 1')">Court 1</button>
+      <button id="roomCourt2" onclick="setRoom('Court 2')">Court 2</button>
+      <button id="roomCourt3" onclick="setRoom('Court 3')">Court 3</button>
+    </div>
 
     <div class="menuGrid">
       <button class="big" onclick="quickOpen('display')">Open Scoreboard</button>
@@ -192,9 +194,9 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
   <button class="back" onclick="showPage('control')">Controller</button>
   <div class="board">
     <section class="topScore">
-      <div class="team glass"><div class="kicker" id="dHomeKicker">HOME</div><div><div id="dHomeName" class="name home"></div><div id="dHomeScore" class="score home">0</div></div><div id="dHomeInfo" class="info"></div></div>
+      <div class="team glass"><div id="dHomeLogo" class="teamLogoBg"></div><div class="kicker" id="dHomeKicker">HOME</div><div><div id="dHomeName" class="name home"></div><div id="dHomeScore" class="score home">0</div></div><div id="dHomeInfo" class="info"></div></div>
       <div class="center glass"><div><div id="dClock" class="clock"></div><div id="dPeriod" class="period"></div><div id="dShot" class="shot"></div></div></div>
-      <div class="team glass"><div class="kicker" id="dAwayKicker">AWAY</div><div><div id="dAwayName" class="name away"></div><div id="dAwayScore" class="score away">0</div></div><div id="dAwayInfo" class="info"></div></div>
+      <div class="team glass"><div id="dAwayLogo" class="teamLogoBg"></div><div class="kicker" id="dAwayKicker">AWAY</div><div><div id="dAwayName" class="name away"></div><div id="dAwayScore" class="score away">0</div></div><div id="dAwayInfo" class="info"></div></div>
     </section>
     <section class="stage glass">
       <video id="localVideo" playsinline></video>
@@ -255,7 +257,18 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
     </section>
 
     <section class="panel">
-      <h2>Videos</h2>
+      <h2>Team Logos</h2>
+      <p class="miniHelp">Team logos sync because they are saved as image data. Use small PNG files if possible.</p>
+      <label>Home Logo<input id="homeLogoFile" type="file" accept="image/*"></label>
+      <label>Away Logo<input id="awayLogoFile" type="file" accept="image/*"></label>
+      <div class="grid">
+        <button onclick="clearLogo('home')">Clear Home Logo</button>
+        <button onclick="clearLogo('away')">Clear Away Logo</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Videos</h2><p class="videoNote">Local videos do not transfer between devices. To show video on the scoreboard, select/upload the video on the scoreboard device, or assign the same video on that device.</p>
       <label>Upload Video<input id="videoFile" type="file" accept="video/*"></label>
       <div class="grid"><button onclick="playUploadedVideo()">Play Uploaded Video</button><button onclick="stopVideo()">Stop Video</button></div>
     </section>
@@ -302,7 +315,7 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v14";
+const KEY="gameday-live-pro-v15";
 let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
@@ -326,14 +339,26 @@ function touch(btn){if(!btn)return;btn.classList.remove("flashTouch");void btn.o
 function roomKey(name){
   return (name||"Court 1").trim().replace(/[^a-zA-Z0-9_-]/g,"-") || "Court-1";
 }
+
+function setRoom(name){
+  s.roomName=roomKey(name);
+  localStorage.setItem(KEY,JSON.stringify(s));
+  render();
+  toast(name);
+}
+
 function quickOpen(mode){
-  s.roomName=roomKey((typeof quickRoom!=="undefined"&&quickRoom.value)||s.roomName||"Court 1");
+  s.roomName=roomKey(s.roomName||"Court 1");
   s.firebaseConfigText=s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
   localStorage.setItem(KEY,JSON.stringify(s));
   connectFirebase(true);
   showPage(mode);
 }
 function toggleAdmin(){
+  if(adminPanel.classList.contains("hidden")){
+    const pass=prompt("Admin password");
+    if(pass!=="1425"){toast("Wrong password");return}
+  }
   adminPanel.classList.toggle("hidden");
   firebaseConfigInput.value=s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
 }
@@ -394,14 +419,14 @@ function applyStartupHash(){
 function render(){
   s=load();
   display.className="display theme-"+s.theme+(display.classList.contains("hidden")?" hidden":"");
-  dHomeName.textContent=s.homeName; dAwayName.textContent=s.awayName; dHomeScore.textContent=s.homeScore; dAwayScore.textContent=s.awayScore;
+  dHomeName.textContent=s.homeName; dAwayName.textContent=s.awayName; dHomeScore.textContent=s.homeScore; dAwayScore.textContent=s.awayScore; if(dHomeLogo)dHomeLogo.style.backgroundImage=s.homeLogo?`url(${s.homeLogo})`:""; if(dAwayLogo)dAwayLogo.style.backgroundImage=s.awayLogo?`url(${s.awayLogo})`:""; ["Court-1","Court-2","Court-3"].forEach((r,i)=>{const b=document.getElementById("roomCourt"+(i+1)); if(b)b.classList.toggle("active",(s.roomName||"Court-1")===r)});
   dHomeKicker.textContent=s.sport==="pickleball"?"TEAM A":"HOME"; dAwayKicker.textContent=s.sport==="pickleball"?"TEAM B":"AWAY";
   homeRosterTitle.textContent=s.sport==="pickleball"?"TEAM A PLAYERS":"HOME PLAYERS"; awayRosterTitle.textContent=s.sport==="pickleball"?"TEAM B PLAYERS":"AWAY PLAYERS";
   if(s.sport==="basketball"){dClock.textContent=displayClock(s.clock);dPeriod.textContent=s.period;dShot.textContent=s.showShotClock==="no"?"":s.shotClock;dHomeInfo.textContent=`FOULS ${s.homeFouls}`;dAwayInfo.textContent=`FOULS ${s.awayFouls}`;}
   if(s.sport==="baseball"){dClock.textContent=s.half;dPeriod.textContent=`INNING ${s.inning}`;dShot.textContent=`B ${s.balls} S ${s.strikes} O ${s.outs}`;dHomeInfo.textContent="DUGOUT";dAwayInfo.textContent="DUGOUT";}
   if(s.sport==="pickleball"){dClock.textContent=s.pickleServer;dPeriod.textContent=`GAME ${s.pickleGame}`;dShot.textContent=`PLAY TO ${s.winScore}`;dHomeInfo.textContent="PADDLE READY";dAwayInfo.textContent="PADDLE READY";}
   dHomePlayers.innerHTML=rows(s.homePlayers); dAwayPlayers.innerHTML=rows(s.awayPlayers); dAnim.textContent=s.animationText;
-  ["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","videoModeSetting"].forEach(id=>{let el=document.getElementById(id); if(el)el.value=s[id]}); if(typeof quickRoom!=="undefined")quickRoom.value=s.roomName||"Court 1"; if(typeof firebaseConfigInput!=="undefined") firebaseConfigInput.value=s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
+  ["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","videoModeSetting"].forEach(id=>{let el=document.getElementById(id); if(el)el.value=s[id]}); if(typeof firebaseConfigInput!=="undefined") firebaseConfigInput.value=s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
   renderSportPanels(); renderScoreButtons(); renderPreview(); renderPlayers();
 }
 function rows(a){return a.length?a.slice(0,6).map(p=>`<tr><td>${p.num||""}</td><td>${p.name||""}</td><td>${p.pts||0}</td><td>${p.fouls||0}</td></tr>`).join(""):`<tr><td colspan="4" style="text-align:center;opacity:.55;padding:14px">Add players</td></tr>`}
@@ -542,7 +567,35 @@ function playAssignedVideo(type){
   return false;
 }
 
-function resetGame(){if(confirm("Reset game?")){stopClock(false);s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore};save()}}
+
+function readLogoFile(file, team){
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement("canvas");
+      const max=420;
+      const scale=Math.min(1,max/Math.max(img.width,img.height));
+      canvas.width=Math.round(img.width*scale);
+      canvas.height=Math.round(img.height*scale);
+      const ctx=canvas.getContext("2d");
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      s[team+"Logo"]=canvas.toDataURL("image/png");
+      save();
+      toast((team==="home"?"Home":"Away")+" logo saved");
+    };
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+function clearLogo(team){
+  s[team+"Logo"]="";
+  save();
+  toast("Logo cleared");
+}
+
+function resetGame(){if(confirm("Reset game?")){stopClock(false);s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText,homeLogo:s.homeLogo,awayLogo:s.awayLogo};save()}}
 ["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","videoModeSetting"].forEach(id=>addEventListener("input",e=>{if(e.target.id===id){s[id]=e.target.type==="number"?Number(e.target.value||0):e.target.value;if(id==="sport"){stopClock(false);s.homeScore=0;s.awayScore=0;s.animationText="READY"}save()}})); addEventListener("input",e=>{if(e.target.id==="firebaseConfigInput"){s.firebaseConfigText=e.target.value;localStorage.setItem(KEY,JSON.stringify(s));} if(e.target.id==="quickRoom"){s.roomName=roomKey(e.target.value);localStorage.setItem(KEY,JSON.stringify(s));}});
 [["sndBuzzer","buzzer"],["sndWhistle","whistle"],["sndCheer","cheer"],["sndHorn","horn"]].forEach(([id,key])=>addEventListener("change",e=>{if(e.target.id===id&&e.target.files[0]){if(soundUrls[key])URL.revokeObjectURL(soundUrls[key]);soundUrls[key]=URL.createObjectURL(e.target.files[0]);toast("Sound loaded")}}));
 function sound(type){
@@ -551,6 +604,12 @@ function sound(type){
   let f=440,d=.15;if(type==="buzzer"){f=110;d=.6}else if(type==="whistle"){f=1200;d=.18}else if(type==="cheer"){f=650;d=.25}else if(type==="horn"){f=220;d=.7}else if(type==="tick"){f=750;d=.06}
   o.frequency.setValueAtTime(f,ctx.currentTime);o.type=type==="whistle"?"sine":"square";g.gain.setValueAtTime(.15,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+d);o.start();o.stop(ctx.currentTime+d)
 }
+
+addEventListener("change",e=>{
+  if(e.target.id==="homeLogoFile")readLogoFile(e.target.files[0],"home");
+  if(e.target.id==="awayLogoFile")readLogoFile(e.target.files[0],"away");
+});
+
 render(); applyStartupHash();
 </script>
 </body>
