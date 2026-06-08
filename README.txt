@@ -1,4 +1,4 @@
-GameDay Live Pro v27
+GameDay Live Pro v28
 
 Feature list:
 - Basketball, baseball, and pickleball scoreboard modes.
@@ -13,7 +13,9 @@ Feature list:
 - Team logo uploads with faded logo behind each team panel.
 - Local video playback on the scoreboard device.
 - Assigned local videos for animation moments.
-- Visual effects and animation text now sync to the second scoreboard device.
+- Visual effects and animation text sync to the second scoreboard device.
+- Score pulse now syncs to the scoreboard device when points are added from the controller.
+- Reset now clears Winner/Timeout overlays on both devices.
 - Center clock-box animation system with pixel-style scoreboard text.
 - Center animations use faded, colorful, smoother motion behind the clock.
 - Regular animations auto-fade after 6 seconds unless changed.
