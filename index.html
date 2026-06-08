@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v18</title>
+<title>GameDay Live Pro v19</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -274,7 +274,7 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
           <option value="off">Off - Video Only</option>
           <option value="on">On - Show Animation Over Video</option>
         </select>
-      </label>
+      </label><p class="videoNote">For overlay: play video first, then tap an animation button like Defense, Winner, or 3 Pointer.</p>
       <label>Upload Video<input id="videoFile" type="file" accept="video/*"></label>
       <div class="grid"><button onclick="playUploadedVideo()">Play Uploaded Video</button><button onclick="stopVideo()">Stop Video</button></div>
     </section>
@@ -315,7 +315,7 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v18";
+const KEY="gameday-live-pro-v19";
 let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
@@ -472,17 +472,31 @@ function particleBurst(type){
   setTimeout(clearFx,1300);
 }
 function trigger(type){
-  stopVideo(false);
-  const assignedMode=playAssignedVideo(type);
+  const overlayOn=(s.videoOverlayEnabled||"off")==="on";
+  const videoAlreadyPlaying=localVideo.classList.contains("show")||((typeof ytFrame!=="undefined")&&ytFrame.classList.contains("show"));
+  if(!(overlayOn&&videoAlreadyPlaying))stopVideo(false);
+
+  const assignedMode=videoAlreadyPlaying?false:playAssignedVideo(type);
   const usedAssignedVideo=!!assignedMode;
   const names={three:"3 POINTER!",homeRun:"HOME RUN!",strikeout:"STRIKEOUT!",timeout:"TIMEOUT",defense:"DEFENSE!",winner:"WINNER!",sideout:"SIDE OUT!"};
-  s.animationText=usedAssignedVideo&&assignedMode==="videoOnly"?"":(names[type]||"READY");
+
+  if(overlayOn&&videoAlreadyPlaying){
+    document.querySelector(".stage").classList.remove("videoOnly");
+    s.animationText=names[type]||"READY";
+  }else{
+    s.animationText=usedAssignedVideo&&assignedMode==="videoOnly"?"":(names[type]||"READY");
+  }
+
   localStorage.setItem(KEY,JSON.stringify(s));
+
   if(usedAssignedVideo&&assignedMode==="videoOnly"){render();return}
+
   particleBurst(type);
+
   if(type=="three"||type=="sideout")sound("cheer");
   if(type=="winner")sound("horn");
   if(type=="timeout"||type=="strikeout")sound("whistle");
+
   render();
 }
 
@@ -518,8 +532,14 @@ function playUploadedVideo(){
   const stage=document.querySelector(".stage");
   stage.classList.remove("videoMode");
   stage.classList.remove("videoOnly");
-  if((s.videoOverlayEnabled||"off")!=="on"){stage.classList.add("videoOnly");dAnim.textContent=""}
+  if((s.videoOverlayEnabled||"off")!=="on"){
+    stage.classList.add("videoOnly");
+    dAnim.textContent="";
+  }else{
+    dAnim.textContent="";
+  }
   localVideo.play();
+  toast((s.videoOverlayEnabled||"off")==="on"?"Video playing - tap an animation button for overlay":"Video playing");
 }
 function ytId(url){let m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&?/]+)/);return m?m[1]:""}
 function playYouTube(){toast("YouTube has been removed. Use local video files.")}
