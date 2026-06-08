@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v24</title>
+<title>GameDay Live Pro v25</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -202,6 +202,24 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 }
 .clockLayer{transform:translateY(-8%);}
 
+
+.videoCheer.show{display:block;background:
+  radial-gradient(circle at 18% 28%,#ffe76a66,transparent 18%),
+  radial-gradient(circle at 80% 38%,#00d08455,transparent 22%),
+  repeating-conic-gradient(from 0deg,#ff7a0044 0 7deg,transparent 7deg 18deg);
+  opacity:.62;
+  animation:videoCelebrationSpin 5.5s linear infinite, videoCelebrationPulse 1.8s ease-in-out infinite;
+}
+.videoCheer.timeoutBg{display:block;background:
+  radial-gradient(circle at 50% 50%,#ffffff40,transparent 36%),
+  repeating-linear-gradient(135deg,#ffffff1f 0 18px,transparent 18px 40px);
+  opacity:.44;
+  animation:timeoutSweep 2.2s linear infinite, videoCelebrationPulse 1.6s ease-in-out infinite;
+}
+@keyframes videoCelebrationSpin{to{transform:rotate(360deg) scale(1.08)}}
+@keyframes videoCelebrationPulse{50%{opacity:.38}}
+@keyframes timeoutSweep{to{transform:translateX(44px)}}
+
 </style>
 </head>
 <body>
@@ -372,7 +390,7 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v24";
+const KEY="gameday-live-pro-v25";
 let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false,animTimer=null;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
@@ -574,7 +592,7 @@ function trigger(type){
     s.gameState="winner";
     showVideoOverlay(winnerOverlayHtml(), true);
   }else{
-    clearVideoOverlay();
+    forceClearVideoOverlay();
   }
 
   clearTimeout(animTimer);
@@ -601,14 +619,21 @@ function trigger(type){
 function showVideoOverlay(content, cheerful){
   videoOverlayText.innerHTML=content;
   videoOverlayText.classList.add("show");
+  videoCheer.classList.remove("timeoutBg");
   videoCheer.classList.toggle("show",!!cheerful);
+  if(!cheerful)videoCheer.classList.add("timeoutBg");
+}
+function forceClearVideoOverlay(){
+  videoOverlayText.classList.remove("show");
+  videoCheer.classList.remove("show");
+  videoCheer.classList.remove("timeoutBg");
+  videoOverlayText.innerHTML="";
 }
 function clearVideoOverlay(){
   if(s.gameState==="winner")return;
-  videoOverlayText.classList.remove("show");
-  videoCheer.classList.remove("show");
-  videoOverlayText.innerHTML="";
+  forceClearVideoOverlay();
 }
+
 function winnerData(){
   const h=Number(s.homeScore||0),a=Number(s.awayScore||0);
   const homeWon=h>=a;
@@ -626,7 +651,7 @@ function clearAnimation(){
   centerFx.className="centerFx";
   centerAnimText.classList.remove("show");
   centerAnimText.textContent="";
-  if(s.gameState!=="timeout"&&s.gameState!=="winner")clearVideoOverlay();
+  if(s.gameState!=="timeout"&&s.gameState!=="winner")forceClearVideoOverlay();
   s.animationText="";
   localStorage.setItem(KEY,JSON.stringify(s));
   render();
@@ -654,9 +679,9 @@ function parseClock(str){let p=String(str||"0:00").split(":").map(Number);return
 function fmt(sec){sec=Math.max(0,sec);let m=Math.floor(sec/60),r=sec%60;return String(m)+":"+String(r).padStart(2,"0")}
 function startClock(){
   stopClock(false);
-  if(s.gameState==="timeout"){
-    s.gameState="";
-    clearVideoOverlay();
+  if(s.gameState==="timeout" || videoOverlayText.classList.contains("show")){
+    s.gameState=s.gameState==="winner"?"winner":"";
+    if(s.gameState!=="winner")forceClearVideoOverlay();
   }
   dAnim.textContent="";
   s.animationText="";
@@ -771,7 +796,7 @@ function resetGame(){
     stopClock(false);
     s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText,homeLogo:s.homeLogo,awayLogo:s.awayLogo};
     s.gameState="";
-    clearVideoOverlay();
+    forceClearVideoOverlay();
     clearAnimation();
     save();
   }
