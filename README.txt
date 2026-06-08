@@ -1,4 +1,4 @@
-GameDay Live Pro v22
+GameDay Live Pro v25
 
 Feature list:
 - Basketball, baseball, and pickleball scoreboard modes.
@@ -7,7 +7,7 @@ Feature list:
 - Admin Settings protected by password 1425.
 - Modern themes with animated backgrounds.
 - Team name, score, fouls, clock, quarter/inning/game display.
-- Larger center game clock.
+- Center game clock moved slightly higher for better balance.
 - Optional shot clock display.
 - Player tables for home and away teams.
 - Team logo uploads with faded logo behind each team panel.
@@ -15,12 +15,15 @@ Feature list:
 - Assigned local videos for animation moments.
 - Center clock-box animation system with pixel-style scoreboard text.
 - Center animations use faded, colorful, smoother motion behind the clock.
-- Animations auto-fade after 6 seconds unless changed.
+- Regular animations auto-fade after 6 seconds unless changed.
+- Team score pulses for 3.5 seconds when that team scores.
 - Hype buttons: Timeout, Defense, Offense, Slam Dunk, He Is On Fire, Winner.
 - 3 Pointer button auto-triggers the 3 pointer animation.
+- Removed the animation-over-video toggle.
 - Regular animations never display in the bottom video player window.
-- Only Timeout and Winner overlay the video-window screen while a video is playing.
+- Timeout displays on the large video screen, stops the clock, has a moving background, and remains until the clock starts again.
 - Winner auto-triggers when a team reaches the play-to score.
+- Winner displays on the large video screen with moving celebration background until the game is reset.
 - Winner video overlay displays: TEAM NAME WINS! plus final score like 23-54.
 - READY disappears as soon as the game clock starts.
 
