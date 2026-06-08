@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v16</title>
+<title>GameDay Live Pro v18</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -56,18 +56,18 @@ radial-gradient(circle at center,#351070,#05070d 70%)}
 .glass{border:1px solid color-mix(in srgb,var(--line),transparent 70%);background:linear-gradient(180deg,var(--panel),#00000033);box-shadow:0 16px 42px #0008;backdrop-filter:blur(14px)}
 .topScore{display:grid;grid-template-columns:1.12fr .72fr 1.12fr;gap:8px;min-height:0}
 .team,.score,.center,.stage,.roster{border-radius:18px;min-height:0;overflow:hidden}
-.team{position:relative;padding:clamp(6px,.9vw,12px);display:grid;grid-template-rows:auto minmax(0,1fr) auto;align-items:center;text-align:center}
+.team{position:relative;padding:clamp(10px,1.2vw,18px);display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center}
 .kicker{font-size:clamp(10px,1.35vw,18px);font-weight:1000;letter-spacing:.16em;opacity:.75}
-.name{position:relative;z-index:2;font-size:clamp(30px,6vh,76px);font-weight:1000;line-height:.9;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.name{position:relative;z-index:2;font-size:clamp(34px,6.2vh,82px);font-weight:1000;line-height:.9;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;margin-top:clamp(6px,1vh,14px)}
 .home{color:var(--home)}
 .away{color:var(--away)}
-.info{position:relative;z-index:2;font-size:clamp(10px,1.1vw,16px);font-weight:900;margin-top:0;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.score{position:relative;z-index:2;background:transparent;display:grid;place-items:center;font-size:clamp(82px,17vh,220px);font-weight:1000;line-height:.68;text-shadow:0 0 34px currentColor;align-self:center}
+.info{position:relative;z-index:2;font-size:clamp(12px,1.25vw,18px);font-weight:900;margin-bottom:clamp(4px,.8vh,10px);opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.score{position:relative;z-index:2;background:transparent;display:block;font-size:clamp(92px,15.2vh,205px);font-weight:1000;line-height:.9;text-shadow:0 0 34px currentColor;margin:clamp(2px,.5vh,8px) 0;max-height:none;overflow:visible}
 .center{background:#000a;display:grid;place-items:center;text-align:center;padding:6px}
-.clock{font-size:clamp(30px,5vw,82px);font-weight:1000;line-height:1}
+.clock{font-size:clamp(36px,7vh,90px);font-weight:1000;line-height:1}
 .period{font-size:clamp(12px,1.8vw,26px);font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .shot{font-size:clamp(18px,2.6vw,40px);font-weight:1000;color:#ff3939;padding:0;margin-top:5px;white-space:nowrap}
-.back{position:absolute;top:12px;right:12px;z-index:20;border:0;border-radius:14px;background:#ffffff22;color:white;font-weight:1000;padding:8px 12px;font-size:14px}
+.back{position:absolute;top:8px;right:8px;z-index:20;border:0;border-radius:999px;background:#ffffff10;color:white;font-weight:1000;padding:6px 9px;font-size:0;opacity:.18;width:34px;height:34px;overflow:hidden}.back:after{content:'☰';font-size:18px}.back:hover,.back:focus{opacity:.85;width:auto;font-size:13px;padding:8px 12px}.back:hover:after,.back:focus:after{content:''}
 .stage{position:relative;display:grid;place-items:center;background:radial-gradient(circle,var(--home)33,transparent 42%),linear-gradient(135deg,#0b0e18,#111827)}
 #localVideo,#ytFrame{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0;display:none;z-index:1}
 #localVideo.show,#ytFrame.show{display:block}
@@ -153,7 +153,7 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 .roomPills button{border:1px solid #ffffff22;background:#ffffff10;color:white;border-radius:14px;min-height:52px;font-weight:1000}
 .roomPills button.active{background:linear-gradient(135deg,#ff7a00,#168cff);box-shadow:0 0 22px #168cff55}
 .videoNote{opacity:.72;font-size:14px;line-height:1.35;margin-top:10px}
-@media(max-width:700px){.board{grid-template-rows:42vh 35vh 19vh}.score{font-size:clamp(70px,16vw,140px)}.name{font-size:clamp(20px,5vw,38px)}th,td{font-size:10px;padding:3px 5px}}
+@media(max-width:700px){.board{grid-template-rows:42vh 35vh 19vh}.score{font-size:clamp(62px,13vh,130px);line-height:.9}.name{font-size:clamp(19px,4.8vh,34px)}th,td{font-size:10px;padding:3px 5px}}
 
 </style>
 </head>
@@ -269,6 +269,12 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 
     <section class="panel">
       <h2>Videos</h2><p class="videoNote">Local videos do not transfer between devices. To show video on the scoreboard, select/upload the video on the scoreboard device, or assign the same video on that device.</p>
+      <label>Animation Overlay On Videos
+        <select id="videoOverlayEnabled">
+          <option value="off">Off - Video Only</option>
+          <option value="on">On - Show Animation Over Video</option>
+        </select>
+      </label>
       <label>Upload Video<input id="videoFile" type="file" accept="video/*"></label>
       <div class="grid"><button onclick="playUploadedVideo()">Play Uploaded Video</button><button onclick="stopVideo()">Stop Video</button></div>
     </section>
@@ -284,12 +290,6 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
           <option value="defense">Defense</option>
           <option value="winner">Winner</option>
           <option value="sideout">Side Out</option>
-        </select>
-      </label>
-      <p class="videoNote">Overlay mode shows built-in text and particles on top of the video. Video Only hides them.</p><label>Video Mode
-        <select id="videoModeSetting">
-          <option value="videoOnly">Video Only</option>
-          <option value="overlay">Video + Animation Overlay</option>
         </select>
       </label>
       <label>Upload Video For This Animation<input id="assignVideoFile" type="file" accept="video/*"></label>
@@ -315,7 +315,7 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v16";
+const KEY="gameday-live-pro-v18";
 let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
@@ -426,7 +426,7 @@ function render(){
   if(s.sport==="baseball"){dClock.textContent=s.half;dPeriod.textContent=`INNING ${s.inning}`;dShot.textContent=`B ${s.balls} S ${s.strikes} O ${s.outs}`;dHomeInfo.textContent="DUGOUT";dAwayInfo.textContent="DUGOUT";}
   if(s.sport==="pickleball"){dClock.textContent=s.pickleServer;dPeriod.textContent=`GAME ${s.pickleGame}`;dShot.textContent=`PLAY TO ${s.winScore}`;dHomeInfo.textContent="PADDLE READY";dAwayInfo.textContent="PADDLE READY";}
   dHomePlayers.innerHTML=rows(s.homePlayers); dAwayPlayers.innerHTML=rows(s.awayPlayers); dAnim.textContent=s.animationText;
-  ["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","videoModeSetting"].forEach(id=>{let el=document.getElementById(id); if(el)el.value=s[id]}); if(typeof firebaseConfigInput!=="undefined") firebaseConfigInput.value=s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
+  ["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","videoOverlayEnabled"].forEach(id=>{let el=document.getElementById(id); if(el)el.value=s[id]}); if(typeof firebaseConfigInput!=="undefined") firebaseConfigInput.value=s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
   renderSportPanels(); renderScoreButtons(); renderPreview(); renderPlayers();
 }
 function rows(a){return a.length?a.slice(0,6).map(p=>`<tr><td>${p.num||""}</td><td>${p.name||""}</td><td>${p.pts||0}</td><td>${p.fouls||0}</td></tr>`).join(""):`<tr><td colspan="4" style="text-align:center;opacity:.55;padding:14px">Add players</td></tr>`}
@@ -517,8 +517,8 @@ function playUploadedVideo(){
   localVideo.classList.add("show");
   const stage=document.querySelector(".stage");
   stage.classList.remove("videoMode");
-  stage.classList.add("videoOnly");
-  dAnim.textContent="";
+  stage.classList.remove("videoOnly");
+  if((s.videoOverlayEnabled||"off")!=="on"){stage.classList.add("videoOnly");dAnim.textContent=""}
   localVideo.play();
 }
 function ytId(url){let m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&?/]+)/);return m?m[1]:""}
@@ -538,8 +538,7 @@ function assignUploadedVideo(){
   if(assignedVideoUrls[key])URL.revokeObjectURL(assignedVideoUrls[key]);
   assignedVideoUrls[key]=URL.createObjectURL(f);
   s.assignedVideos=s.assignedVideos||{};
-  s.assignedVideos[key]={type:"local",mode:videoModeSetting.value||"videoOnly"};
-  s.videoModeSetting=videoModeSetting.value||"videoOnly";
+  s.assignedVideos[key]={type:"local"};
   save(); toast("Video assigned");
 }
 function assignYouTubeVideo(){toast("YouTube has been removed. Use local video files.")}
@@ -562,10 +561,10 @@ function playAssignedVideo(type){
     const stage=document.querySelector(".stage");
     stage.classList.remove("videoOnly");
     stage.classList.remove("videoMode");
-    const mode=item.mode||s.videoModeSetting||"videoOnly";
-    if(mode==="videoOnly")stage.classList.add("videoOnly");
+    const overlayOn=(s.videoOverlayEnabled||"off")==="on";
+    if(!overlayOn)stage.classList.add("videoOnly");
     localVideo.play();
-    return mode;
+    return overlayOn?"overlay":"videoOnly";
   }
   return false;
 }
@@ -599,7 +598,7 @@ function clearLogo(team){
 }
 
 function resetGame(){if(confirm("Reset game?")){stopClock(false);s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText,homeLogo:s.homeLogo,awayLogo:s.awayLogo};save()}}
-["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","videoModeSetting"].forEach(id=>addEventListener("input",e=>{if(e.target.id===id){s[id]=e.target.type==="number"?Number(e.target.value||0):e.target.value;if(id==="sport"){stopClock(false);s.homeScore=0;s.awayScore=0;s.animationText="READY"}save()}})); addEventListener("input",e=>{if(e.target.id==="firebaseConfigInput"){s.firebaseConfigText=e.target.value;localStorage.setItem(KEY,JSON.stringify(s));} if(e.target.id==="quickRoom"){s.roomName=roomKey(e.target.value);localStorage.setItem(KEY,JSON.stringify(s));}});
+["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","videoOverlayEnabled"].forEach(id=>addEventListener("input",e=>{if(e.target.id===id){s[id]=e.target.type==="number"?Number(e.target.value||0):e.target.value;if(id==="sport"){stopClock(false);s.homeScore=0;s.awayScore=0;s.animationText="READY"}save()}})); addEventListener("input",e=>{if(e.target.id==="firebaseConfigInput"){s.firebaseConfigText=e.target.value;localStorage.setItem(KEY,JSON.stringify(s));} if(e.target.id==="quickRoom"){s.roomName=roomKey(e.target.value);localStorage.setItem(KEY,JSON.stringify(s));}});
 [["sndBuzzer","buzzer"],["sndWhistle","whistle"],["sndCheer","cheer"],["sndHorn","horn"]].forEach(([id,key])=>addEventListener("change",e=>{if(e.target.id===id&&e.target.files[0]){if(soundUrls[key])URL.revokeObjectURL(soundUrls[key]);soundUrls[key]=URL.createObjectURL(e.target.files[0]);toast("Sound loaded")}}));
 function sound(type){
   if(soundUrls[type]){new Audio(soundUrls[type]).play();return}
