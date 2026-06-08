@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v22</title>
+<title>GameDay Live Pro v24</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -190,6 +190,18 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 @keyframes bgPulse{50%{opacity:.6}}
 @keyframes bgScan{to{transform:translateY(18px)}}
 
+
+.score.scorePulse{animation:scorePulse 3.5s ease-in-out}
+@keyframes scorePulse{
+  0%{transform:scale(1);filter:brightness(1)}
+  12%{transform:scale(1.12);filter:brightness(1.45)}
+  28%{transform:scale(1.04);filter:brightness(1.25)}
+  44%{transform:scale(1.10);filter:brightness(1.4)}
+  65%{transform:scale(1.03);filter:brightness(1.18)}
+  100%{transform:scale(1);filter:brightness(1)}
+}
+.clockLayer{transform:translateY(-8%);}
+
 </style>
 </head>
 <body>
@@ -317,12 +329,6 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 
     <section class="panel">
       <h2>Videos</h2><p class="videoNote">Local videos do not transfer between devices. To show video on the scoreboard, select/upload the video on the scoreboard device, or assign the same video on that device.</p>
-      <label>Animation Overlay On Videos
-        <select id="videoOverlayEnabled">
-          <option value="off">Off - Video Only</option>
-          <option value="on">On - Show Animation Over Video</option>
-        </select>
-      </label><p class="videoNote">For overlay: play video first, then tap an animation button like Defense, Winner, or 3 Pointer.</p>
       <label>Upload Video<input id="videoFile" type="file" accept="video/*"></label>
       <div class="grid"><button onclick="playUploadedVideo()">Play Uploaded Video</button><button onclick="stopVideo()">Stop Video</button></div>
     </section>
@@ -366,11 +372,11 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v22";
+const KEY="gameday-live-pro-v24";
 let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false,animTimer=null;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
-const defaults={sport:"basketball",theme:"neon",homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,clock:"08:00",period:"1ST QUARTER",shotClock:"24",showShotClock:"yes",homeFouls:0,awayFouls:0,inning:1,half:"TOP",balls:0,strikes:0,outs:0,pickleGame:1,pickleServer:"HOME SERVER 1",winScore:15,homePlayers:[],awayPlayers:[],animationText:"READY",assignedVideos:{},roomName:"Court 1",firebaseConfigText:DEFAULT_FIREBASE_CONFIG_TEXT};
+const defaults={sport:"basketball",theme:"neon",homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,clock:"08:00",period:"1ST QUARTER",shotClock:"24",showShotClock:"yes",homeFouls:0,awayFouls:0,inning:1,half:"TOP",balls:0,strikes:0,outs:0,pickleGame:1,pickleServer:"HOME SERVER 1",winScore:15,homePlayers:[],awayPlayers:[],animationText:"",assignedVideos:{},gameState:"",roomName:"Court 1",firebaseConfigText:DEFAULT_FIREBASE_CONFIG_TEXT};
 let s=load();
 
 function load(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){return {...defaults}}}
@@ -477,8 +483,10 @@ function render(){
   if(s.sport==="baseball"){dClock.textContent=s.half;dPeriod.textContent=`INNING ${s.inning}`;dShot.textContent=`B ${s.balls} S ${s.strikes} O ${s.outs}`;dHomeInfo.textContent="DUGOUT";dAwayInfo.textContent="DUGOUT";}
   if(s.sport==="pickleball"){dClock.textContent=s.pickleServer;dPeriod.textContent=`GAME ${s.pickleGame}`;dShot.textContent=`PLAY TO ${s.winScore}`;dHomeInfo.textContent="PADDLE READY";dAwayInfo.textContent="PADDLE READY";}
   dHomePlayers.innerHTML=rows(s.homePlayers); dAwayPlayers.innerHTML=rows(s.awayPlayers); dAnim.textContent="";
-  ["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","videoOverlayEnabled"].forEach(id=>{let el=document.getElementById(id); if(el)el.value=s[id]}); if(typeof firebaseConfigInput!=="undefined") firebaseConfigInput.value=s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
+  ["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore"].forEach(id=>{let el=document.getElementById(id); if(el)el.value=s[id]}); if(typeof firebaseConfigInput!=="undefined") firebaseConfigInput.value=s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
   renderSportPanels(); renderScoreButtons(); renderPreview(); renderPlayers();
+  if(s.gameState==="timeout")showVideoOverlay("TIMEOUT",false);
+  if(s.gameState==="winner")showVideoOverlay(winnerOverlayHtml(),true);
 }
 function rows(a){return a.length?a.slice(0,6).map(p=>`<tr><td>${p.num||""}</td><td>${p.name||""}</td><td>${p.pts||0}</td><td>${p.fouls||0}</td></tr>`).join(""):`<tr><td colspan="4" style="text-align:center;opacity:.55;padding:14px">Add players</td></tr>`}
 function renderSportPanels(){document.querySelectorAll(".sportPanel").forEach(el=>el.classList.add("hidden"));document.getElementById(s.sport+"Controls").classList.remove("hidden")}
@@ -491,7 +499,26 @@ function renderScoreButtons(){
 }
 function renderPreview(){}
 function previewAnim(type){trigger(type);toast("Preview")}
-function score(team,n,btn,anim){s[team+"Score"]=Math.max(0,s[team+"Score"]+n);touch(btn);toast((team=="home"?(s.sport==="pickleball"?"Team A":"Home"):(s.sport==="pickleball"?"Team B":"Away"))+" "+(n>0?"+":"")+n);sound("tick");if(anim)trigger(anim);checkWinner(team);save()}
+
+function pulseScore(team){
+  const el=team==="home"?dHomeScore:dAwayScore;
+  if(!el)return;
+  el.classList.remove("scorePulse");
+  void el.offsetWidth;
+  el.classList.add("scorePulse");
+  setTimeout(()=>el.classList.remove("scorePulse"),3500);
+}
+
+function score(team,n,btn,anim){
+  s[team+"Score"]=Math.max(0,s[team+"Score"]+n);
+  if(n>0)pulseScore(team);
+  touch(btn);
+  toast((team=="home"?(s.sport==="pickleball"?"Team A":"Home"):(s.sport==="pickleball"?"Team B":"Away"))+" "+(n>0?"+":"")+n);
+  sound("tick");
+  if(anim)trigger(anim);
+  checkWinner(team);
+  save();
+}
 function checkWinner(team){
   const target=Number(s.winScore||0);
   if(target>0&&s[team+"Score"]>=target){
@@ -535,10 +562,20 @@ function trigger(type){
   const isVideoPlaying=localVideo.classList.contains("show")||((typeof ytFrame!=="undefined")&&ytFrame.classList.contains("show"));
   const assignedMode=isVideoPlaying?false:playAssignedVideo(type);
   const usedAssignedVideo=!!assignedMode;
-  const overlayVideo=(type==="timeout"||type==="winner")&&isVideoPlaying;
 
   s.animationText=names[type]||"";
   localStorage.setItem(KEY,JSON.stringify(s));
+
+  if(type==="timeout"){
+    stopClock(false);
+    s.gameState="timeout";
+    showVideoOverlay("TIMEOUT", false);
+  }else if(type==="winner"){
+    s.gameState="winner";
+    showVideoOverlay(winnerOverlayHtml(), true);
+  }else{
+    clearVideoOverlay();
+  }
 
   clearTimeout(animTimer);
   centerFx.className="centerFx "+type+" active";
@@ -546,28 +583,31 @@ function trigger(type){
   centerAnimText.classList.add("show");
   dAnim.textContent="";
 
-  videoOverlayText.classList.remove("show");
-  videoCheer.classList.remove("show");
-  videoOverlayText.innerHTML="";
-
-  if(overlayVideo){
-    if(type==="winner"){
-      videoOverlayText.innerHTML=winnerOverlayHtml();
-      videoCheer.classList.add("show");
-    }else{
-      videoOverlayText.textContent=s.animationText;
-    }
-    videoOverlayText.classList.add("show");
-  }
-
   if(!(usedAssignedVideo&&assignedMode==="videoOnly")) particleBurst(type);
 
   if(type=="three"||type=="sideout")sound("cheer");
   if(type=="winner")sound("horn");
   if(type=="timeout"||type=="strikeout")sound("whistle");
 
+  if(type==="timeout"||type==="winner"){
+    // Timeout persists until clock starts. Winner persists until reset.
+    render();
+    return;
+  }
+
   animTimer=setTimeout(()=>clearAnimation(),6000);
   render();
+}
+function showVideoOverlay(content, cheerful){
+  videoOverlayText.innerHTML=content;
+  videoOverlayText.classList.add("show");
+  videoCheer.classList.toggle("show",!!cheerful);
+}
+function clearVideoOverlay(){
+  if(s.gameState==="winner")return;
+  videoOverlayText.classList.remove("show");
+  videoCheer.classList.remove("show");
+  videoOverlayText.innerHTML="";
 }
 function winnerData(){
   const h=Number(s.homeScore||0),a=Number(s.awayScore||0);
@@ -586,13 +626,15 @@ function clearAnimation(){
   centerFx.className="centerFx";
   centerAnimText.classList.remove("show");
   centerAnimText.textContent="";
-  videoOverlayText.classList.remove("show");
-  videoCheer.classList.remove("show");
-  videoOverlayText.innerHTML="";
+  if(s.gameState!=="timeout"&&s.gameState!=="winner")clearVideoOverlay();
   s.animationText="";
   localStorage.setItem(KEY,JSON.stringify(s));
   render();
 }
+
+
+
+
 
 
 
@@ -612,6 +654,10 @@ function parseClock(str){let p=String(str||"0:00").split(":").map(Number);return
 function fmt(sec){sec=Math.max(0,sec);let m=Math.floor(sec/60),r=sec%60;return String(m)+":"+String(r).padStart(2,"0")}
 function startClock(){
   stopClock(false);
+  if(s.gameState==="timeout"){
+    s.gameState="";
+    clearVideoOverlay();
+  }
   dAnim.textContent="";
   s.animationText="";
   localStorage.setItem(KEY,JSON.stringify(s));
@@ -639,15 +685,12 @@ function playUploadedVideo(){
   localVideo.classList.add("show");
   const stage=document.querySelector(".stage");
   stage.classList.remove("videoMode");
-  stage.classList.remove("videoOnly");
-  if((s.videoOverlayEnabled||"off")!=="on"){
-    stage.classList.add("videoOnly");
-    dAnim.textContent="";
-  }else{
-    dAnim.textContent="";
-  }
+  stage.classList.add("videoOnly");
+  dAnim.textContent="";
   localVideo.play();
-  toast((s.videoOverlayEnabled||"off")==="on"?"Video playing - tap an animation button for overlay":"Video playing");
+  if(s.gameState==="timeout")showVideoOverlay("TIMEOUT",false);
+  if(s.gameState==="winner")showVideoOverlay(winnerOverlayHtml(),true);
+  toast("Video playing");
 }
 function ytId(url){let m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&?/]+)/);return m?m[1]:""}
 function playYouTube(){toast("YouTube has been removed. Use local video files.")}
@@ -687,12 +730,10 @@ function playAssignedVideo(type){
     localVideo.src=assignedVideoUrls[type];
     localVideo.classList.add("show");
     const stage=document.querySelector(".stage");
-    stage.classList.remove("videoOnly");
     stage.classList.remove("videoMode");
-    const overlayOn=(s.videoOverlayEnabled||"off")==="on";
-    if(!overlayOn)stage.classList.add("videoOnly");
+    stage.classList.add("videoOnly");
     localVideo.play();
-    return overlayOn?"overlay":"videoOnly";
+    return "videoOnly";
   }
   return false;
 }
@@ -725,8 +766,17 @@ function clearLogo(team){
   toast("Logo cleared");
 }
 
-function resetGame(){if(confirm("Reset game?")){stopClock(false);s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText,homeLogo:s.homeLogo,awayLogo:s.awayLogo};save()}}
-["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","videoOverlayEnabled"].forEach(id=>addEventListener("input",e=>{if(e.target.id===id){s[id]=e.target.type==="number"?Number(e.target.value||0):e.target.value;if(id==="sport"){stopClock(false);s.homeScore=0;s.awayScore=0;s.animationText="READY"}save()}})); addEventListener("input",e=>{if(e.target.id==="firebaseConfigInput"){s.firebaseConfigText=e.target.value;localStorage.setItem(KEY,JSON.stringify(s));} if(e.target.id==="quickRoom"){s.roomName=roomKey(e.target.value);localStorage.setItem(KEY,JSON.stringify(s));}});
+function resetGame(){
+  if(confirm("Reset game?")){
+    stopClock(false);
+    s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText,homeLogo:s.homeLogo,awayLogo:s.awayLogo};
+    s.gameState="";
+    clearVideoOverlay();
+    clearAnimation();
+    save();
+  }
+}
+["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore"].forEach(id=>addEventListener("input",e=>{if(e.target.id===id){s[id]=e.target.type==="number"?Number(e.target.value||0):e.target.value;if(id==="sport"){stopClock(false);s.homeScore=0;s.awayScore=0;s.animationText="READY"}save()}})); addEventListener("input",e=>{if(e.target.id==="firebaseConfigInput"){s.firebaseConfigText=e.target.value;localStorage.setItem(KEY,JSON.stringify(s));} if(e.target.id==="quickRoom"){s.roomName=roomKey(e.target.value);localStorage.setItem(KEY,JSON.stringify(s));}});
 [["sndBuzzer","buzzer"],["sndWhistle","whistle"],["sndCheer","cheer"],["sndHorn","horn"]].forEach(([id,key])=>addEventListener("change",e=>{if(e.target.id===id&&e.target.files[0]){if(soundUrls[key])URL.revokeObjectURL(soundUrls[key]);soundUrls[key]=URL.createObjectURL(e.target.files[0]);toast("Sound loaded")}}));
 function sound(type){
   if(soundUrls[type]){new Audio(soundUrls[type]).play();return}
