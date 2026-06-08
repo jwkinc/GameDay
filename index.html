@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v26</title>
+<title>GameDay Live Pro v27</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -390,11 +390,11 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v26";
-let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false,animTimer=null;
+const KEY="gameday-live-pro-v27";
+let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false,animTimer=null,lastAnimationEventId=null;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
-const defaults={sport:"basketball",theme:"neon",homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,clock:"08:00",period:"1ST QUARTER",shotClock:"24",showShotClock:"yes",homeFouls:0,awayFouls:0,inning:1,half:"TOP",balls:0,strikes:0,outs:0,pickleGame:1,pickleServer:"HOME SERVER 1",winScore:15,homePlayers:[],awayPlayers:[],animationText:"",assignedVideos:{},gameState:"",roomName:"Court 1",firebaseConfigText:DEFAULT_FIREBASE_CONFIG_TEXT};
+const defaults={sport:"basketball",theme:"neon",homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,clock:"08:00",period:"1ST QUARTER",shotClock:"24",showShotClock:"yes",homeFouls:0,awayFouls:0,inning:1,half:"TOP",balls:0,strikes:0,outs:0,pickleGame:1,pickleServer:"HOME SERVER 1",winScore:15,homePlayers:[],awayPlayers:[],animationText:"",assignedVideos:{},gameState:"",animationEvent:null,roomName:"Court 1",firebaseConfigText:DEFAULT_FIREBASE_CONFIG_TEXT};
 let s=load();
 
 function load(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){return {...defaults}}}
@@ -460,10 +460,14 @@ function connectFirebase(silent=false){
       const data=snap.val();
       if(data){
         remoteApplying=true;
+        const incomingEvent=data.animationEvent;
         s={...defaults,...data,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText};
         localStorage.setItem(KEY,JSON.stringify(s));
         remoteApplying=false;
         render();
+        if(incomingEvent&&incomingEvent.id&&incomingEvent.id!==lastAnimationEventId){
+          setTimeout(()=>runAnimation(incomingEvent.type,incomingEvent.id),25);
+        }
       }else{
         save();
       }
@@ -576,13 +580,21 @@ function particleBurst(type){
   setTimeout(clearFx,1300);
 }
 function trigger(type){
+  s.animationEvent={type:type,id:Date.now()+"-"+Math.random().toString(36).slice(2)};
+  localStorage.setItem(KEY,JSON.stringify(s));
+  save();
+  runAnimation(type,s.animationEvent.id);
+}
+function runAnimation(type,eventId){
+  if(eventId&&eventId===lastAnimationEventId)return;
+  if(eventId)lastAnimationEventId=eventId;
+
   const names={three:"3 POINTER!",homeRun:"HOME RUN!",strikeout:"STRIKEOUT!",timeout:"TIMEOUT",defense:"DEFENSE!",offense:"OFFENSE!",dunk:"SLAM DUNK!",fire:"HE IS ON FIRE!",winner:"WINNER!",sideout:"SIDE OUT!"};
   const isVideoPlaying=localVideo.classList.contains("show")||((typeof ytFrame!=="undefined")&&ytFrame.classList.contains("show"));
   const assignedMode=isVideoPlaying?false:playAssignedVideo(type);
   const usedAssignedVideo=!!assignedMode;
 
   s.animationText=names[type]||"";
-  localStorage.setItem(KEY,JSON.stringify(s));
 
   if(type==="timeout"){
     stopClock(false);
@@ -591,7 +603,7 @@ function trigger(type){
   }else if(type==="winner"){
     s.gameState="winner";
     showVideoOverlay(winnerOverlayHtml(), true);
-  }else{
+  }else if(s.gameState!=="winner"){
     forceClearVideoOverlay();
   }
 
@@ -608,12 +620,13 @@ function trigger(type){
   if(type=="timeout"||type=="strikeout")sound("whistle");
 
   if(type==="timeout"||type==="winner"){
-    // Timeout persists until clock starts. Winner persists until reset.
+    localStorage.setItem(KEY,JSON.stringify(s));
     render();
     return;
   }
 
   animTimer=setTimeout(()=>clearAnimation(),6000);
+  localStorage.setItem(KEY,JSON.stringify(s));
   render();
 }
 function showVideoOverlay(content, cheerful){
@@ -683,7 +696,7 @@ function parseClock(str){let p=String(str||"0:00").split(":").map(Number);return
 function fmt(sec){sec=Math.max(0,sec);let m=Math.floor(sec/60),r=sec%60;return String(m)+":"+String(r).padStart(2,"0")}
 
 function clearTimeoutState(){
-  s.gameState="";
+  s.gameState="";s.animationEvent=null;
   s.animationText="";
   if(typeof centerFx!=="undefined")centerFx.className="centerFx";
   if(typeof centerAnimText!=="undefined"){
