@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>GameDay Live v11</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
+button,input,select{font:inherit}
+button{touch-action:manipulation}
+.hidden{display:none!important}
+
+/* HOME */
+.menu{height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 18%,#ff7a0044,transparent 32%),radial-gradient(circle at 80% 20%,#168cff55,transparent 34%),#05070d}
+.card{width:min(850px,100%);border:1px solid #ffffff22;border-radius:34px;background:linear-gradient(180deg,#ffffff16,#ffffff08);box-shadow:0 50px 110px #0009;padding:38px;text-align:center}
+.logo{font-size:clamp(46px,8vw,90px);font-weight:1000;line-height:.95;margin:0}
+.tag{font-size:clamp(17px,2.4vw,26px);opacity:.82;margin:16px 0 28px}
+.menuGrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.big{border:0;border-radius:22px;padding:24px 16px;font-size:23px;font-weight:1000;color:#fff;background:linear-gradient(135deg,#ff7a00,#ff2f82);box-shadow:0 20px 40px #0008}
+.big.blue{background:linear-gradient(135deg,#168cff,#00d084)}
+
+/* SCOREBOARD */
+.display{height:100vh;width:100vw;overflow:hidden;background:#05070d;position:relative}
+.display.theme-neon{--home:#ff7a00;--away:#168cff;--panel:#08111fcc;--line:#ffffff24;background:
+radial-gradient(circle at 15% 15%,#ff790060,transparent 28%),
+radial-gradient(circle at 82% 16%,#168cff70,transparent 33%),
+radial-gradient(circle at 50% 90%,#00d08435,transparent 35%),#05070d}
+.display.theme-classic{--home:#ff2d2d;--away:#f9d65c;--panel:#080400e6;--line:#f5c16c88;background:
+repeating-linear-gradient(90deg,#000 0 18px,#070707 18px 36px),
+radial-gradient(circle at center,#5b2d0c55,transparent 55%),#050403}
+.display.theme-galaxy{--home:#f472b6;--away:#22d3ee;--panel:#100622dd;--line:#a78bfa88;background:
+radial-gradient(circle at 10% 15%,#ffffffaa 0 1px,transparent 2px),
+radial-gradient(circle at 30% 40%,#ffffff99 0 1px,transparent 2px),
+radial-gradient(circle at 75% 30%,#ffffff99 0 1px,transparent 2px),
+radial-gradient(circle at 20% 25%,#8b5cf688,transparent 26%),
+radial-gradient(circle at 78% 22%,#22d3ee66,transparent 31%),
+radial-gradient(circle at 50% 90%,#f472b644,transparent 36%),#030014}
+.display.theme-court{--home:#fb923c;--away:#38bdf8;--panel:#190b03dd;--line:#fdba7488;background:
+linear-gradient(90deg,transparent 49.7%,#ffffff22 50%,transparent 50.3%),
+radial-gradient(circle at center,transparent 0 18%,#ffffff18 18.3%,transparent 18.6%),
+repeating-linear-gradient(0deg,#3a1808 0 70px,#2b1004 70px 140px)}
+.display.theme-diamond{--home:#facc15;--away:#22c55e;--panel:#04140add;--line:#86efac88;background:
+linear-gradient(45deg,transparent 48%,#d6a35a55 49%,#d6a35a55 51%,transparent 52%),
+radial-gradient(circle at 50% 58%,#17c96477,transparent 34%),
+linear-gradient(135deg,#04170b,#211106)}
+.display.theme-arcade{--home:#ff3df2;--away:#00e5ff;--panel:#130421dd;--line:#ff3df288;background:
+repeating-linear-gradient(0deg,#ffffff08 0 2px,transparent 2px 7px),
+linear-gradient(90deg,#00e5ff22 0 1px,transparent 1px 80px),
+linear-gradient(0deg,#ff3df222 0 1px,transparent 1px 80px),
+radial-gradient(circle at center,#351070,#05070d 70%)}
+.bgMotion{position:absolute;inset:0;pointer-events:none;opacity:.32;background:linear-gradient(115deg,transparent 0 43%,#ffffff22 50%,transparent 57%);animation:sweep 6s linear infinite}
+@keyframes sweep{from{transform:translateX(-90%)}to{transform:translateX(90%)}}
+
+.board{position:relative;height:100vh;width:100vw;padding:8px;display:grid;grid-template-rows:30vh 35vh 31vh;gap:8px}
+.glass{border:1px solid color-mix(in srgb,var(--line),transparent 70%);background:linear-gradient(180deg,var(--panel),#00000033);box-shadow:0 16px 42px #0008;backdrop-filter:blur(14px)}
+.topScore{display:grid;grid-template-columns:1.15fr .7fr 1.15fr;gap:8px;min-height:0}
+.team,.score,.center,.stage,.roster{border-radius:18px;min-height:0;overflow:hidden}
+.team{padding:clamp(7px,1vw,13px);display:grid;grid-template-rows:auto 1fr auto;align-items:center;text-align:center}
+.kicker{font-size:clamp(10px,1.35vw,18px);font-weight:1000;letter-spacing:.16em;opacity:.75}
+.name{font-size:clamp(28px,5vw,86px);font-weight:1000;line-height:.9;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.home{color:var(--home)}
+.away{color:var(--away)}
+.info{font-size:clamp(10px,1.3vw,17px);font-weight:900;margin-top:5px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.score{background:transparent;display:grid;place-items:center;font-size:clamp(105px,19vw,300px);font-weight:1000;line-height:.78;text-shadow:0 0 34px currentColor}
+.center{background:#000a;display:grid;place-items:center;text-align:center;padding:6px}
+.clock{font-size:clamp(30px,5vw,82px);font-weight:1000;line-height:1}
+.period{font-size:clamp(12px,1.8vw,26px);font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shot{font-size:clamp(18px,2.6vw,40px);font-weight:1000;color:#ff3939;border:1px solid #ffffff2b;border-radius:12px;padding:2px 14px;margin-top:5px;white-space:nowrap}
+.back{position:absolute;top:12px;right:12px;z-index:20;border:0;border-radius:14px;background:#ffffff22;color:white;font-weight:1000;padding:8px 12px;font-size:14px}
+.stage{position:relative;display:grid;place-items:center;background:radial-gradient(circle,var(--home)33,transparent 42%),linear-gradient(135deg,#0b0e18,#111827)}
+#localVideo,#ytFrame{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border:0;display:none}
+#localVideo.show,#ytFrame.show{display:block}
+.animText{z-index:4;font-size:clamp(42px,8.8vw,150px);font-weight:1000;text-align:center;line-height:.9;text-shadow:0 0 45px #000;animation:pulse 1.1s infinite}
+@keyframes pulse{50%{transform:scale(1.04)}}
+.fx{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.fx.flash:before{content:"";position:absolute;inset:0;background:radial-gradient(circle,#ffffff88,transparent 55%);animation:flash .9s ease-out}
+.particle{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--home);box-shadow:0 0 18px currentColor;animation:fly .9s ease-out forwards}
+.streak{position:absolute;width:120px;height:6px;border-radius:999px;background:linear-gradient(90deg,transparent,#fff,var(--home));animation:streak .9s ease-out forwards}
+.ring{position:absolute;left:50%;top:50%;width:40px;height:40px;border:5px solid var(--away);border-radius:50%;transform:translate(-50%,-50%);animation:ring 1s ease-out forwards}
+.confetti{position:absolute;width:9px;height:18px;background:var(--home);animation:confetti 1.2s ease-out forwards}
+@keyframes fly{to{transform:translate(var(--x),var(--y)) scale(.3);opacity:0}}
+@keyframes streak{from{transform:translate(var(--sx),var(--sy)) rotate(var(--rot));opacity:1}to{transform:translate(var(--ex),var(--ey)) rotate(var(--rot));opacity:0}}
+@keyframes ring{to{width:380px;height:380px;opacity:0}}
+@keyframes confetti{to{transform:translate(var(--x),var(--y)) rotate(540deg);opacity:0}}
+@keyframes flash{from{opacity:1}to{opacity:0}}
+
+.rosters{display:grid;grid-template-columns:1fr 1fr;gap:8px;min-height:0}
+.roster{background:#0008}
+.roster h2{font-size:clamp(12px,1.7vw,21px);margin:0;padding:7px 10px;border-bottom:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th,td{padding:6px 9px;border-bottom:1px solid #ffffff0c;font-size:clamp(15px,1.9vw,25px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+th{opacity:.62;text-align:left;font-size:clamp(10px,1.1vw,15px)}
+th:nth-child(1),td:nth-child(1){width:15%}
+th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4){width:16%;text-align:center}
+
+/* CONTROLLER */
+.control{height:100vh;overflow:auto;background:#0a0d18;padding:14px}
+.controller{width:min(980px,100%);margin:0 auto;padding-bottom:30px}
+.nav{position:sticky;top:0;background:#0a0d18;z-index:20;padding:6px 0;display:flex;gap:10px;flex-wrap:wrap}
+.nav button,.panel button{border:0;border-radius:14px;background:linear-gradient(135deg,#1f75ff,#9b2fff);color:white;font-weight:900;min-height:48px;padding:10px}
+.panel{border:1px solid #ffffff20;border-radius:24px;background:#ffffff0c;padding:16px;margin:14px 0}
+.panel h2{margin:0 0 12px}
+label{display:grid;gap:6px;margin:10px 0;font-weight:800}
+textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13px;background:#111827;color:white;padding:13px;font-family:monospace;font-size:13px} .miniHelp{opacity:.72;font-size:14px;line-height:1.35} input,select{width:100%;border:1px solid #ffffff2b;border-radius:13px;background:#111827;color:white;padding:13px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.threeGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.scoreBtn:active,.panel button:active{transform:scale(.96);filter:brightness(1.35)}
+.flashTouch{animation:tapFlash .32s ease}
+@keyframes tapFlash{0%{box-shadow:0 0 0 0 #fff8}100%{box-shadow:0 0 0 18px transparent}}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#111827ee;border:1px solid #ffffff2b;border-radius:16px;padding:12px 18px;font-weight:1000;z-index:50;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.toast.show{opacity:1}
+.playerChip{display:grid;grid-template-columns:1fr auto auto auto;gap:6px;align-items:center;border-bottom:1px solid #ffffff14;padding:8px 0}
+.playerChip button{min-height:34px;padding:6px 9px;background:#263249}
+.previewGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.preview{position:relative;height:110px;border:1px solid #ffffff22;border-radius:16px;background:#0b1020;overflow:hidden;display:grid;place-items:center;font-weight:1000}
+.preview span{z-index:3;text-align:center}
+.preview:before{content:"";position:absolute;inset:0;opacity:.75}
+.preview.three:before{background:radial-gradient(circle,#fff 0 3%,#ff8a00 4% 12%,transparent 29%),repeating-conic-gradient(#ff7a0066 0 12deg,transparent 12deg 24deg);animation:spin 3s linear infinite}
+.preview.homeRun:before{background:radial-gradient(circle at 45% 55%,#ffe76a 0 5%,#ff5500 9%,transparent 30%);animation:pulse 1.2s infinite}
+.preview.strikeout:before{background:repeating-linear-gradient(135deg,#ff303077 0 18px,transparent 18px 36px);animation:slide 1s linear infinite}
+.preview.timeout:before{background:radial-gradient(circle,#ffffff55,transparent 52%);animation:pulse 1s infinite}
+.preview.defense:before{background:radial-gradient(circle,#168cff88,transparent 46%);animation:pulse 1s infinite}
+.preview.winner:before{background:radial-gradient(circle,#ffe76aaa,transparent 40%),repeating-conic-gradient(#ffe76a77 0 12deg,transparent 12deg 25deg);animation:spin 4s linear infinite}
+.preview.sideout:before{background:radial-gradient(circle,#00d08488,transparent 46%);animation:pulse 1s infinite}
+.resetBtn{width:100%;background:linear-gradient(135deg,#ff3030,#8b0000)!important}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slide{to{transform:translateX(36px)}}
+
+@media(max-width:700px){
+ .display{height:100vh;overflow:hidden}
+ .board{grid-template-rows:31vh 35vh 30vh}
+ .topScore{grid-template-columns:1.1fr .72fr 1.1fr}
+ .team{padding:7px}.info{font-size:10px}.kicker{font-size:9px}.name{font-size:clamp(15px,4.3vw,29px)}
+ .score{font-size:clamp(42px,13vw,86px)}.clock{font-size:clamp(23px,7vw,44px)}.period{font-size:clamp(10px,2.8vw,17px)}.shot{font-size:clamp(15px,4.5vw,28px)}
+ .animText{font-size:clamp(28px,9vw,70px)}
+ .rosters{grid-template-columns:1fr 1fr}.roster h2{font-size:12px;padding:6px}th,td{font-size:11px;padding:4px 5px}
+ .menuGrid,.grid,.previewGrid,.threeGrid{grid-template-columns:1fr}.card{padding:26px}
+}
+</style>
+</head>
+<body>
+<section id="menu" class="menu">
+  <div class="card">
+    <h1 class="logo">GameDay Live</h1>
+    <div class="tag">Score. Hype. Celebrate.</div>
+    <div class="menuGrid">
+      <button class="big" onclick="showPage('display')">Open Scoreboard</button>
+      <button class="big blue" onclick="showPage('control')">Open Controller</button>
+    </div>
+  </div>
+</section>
+
+<section id="display" class="display theme-neon hidden">
+  <div class="bgMotion"></div>
+  <button class="back" onclick="showPage('control')">Controller</button>
+  <div class="board">
+    <section class="topScore">
+      <div class="team glass"><div class="kicker" id="dHomeKicker">HOME</div><div><div id="dHomeName" class="name home"></div><div id="dHomeScore" class="score home">0</div></div><div id="dHomeInfo" class="info"></div></div>
+      <div class="center glass"><div><div id="dClock" class="clock"></div><div id="dPeriod" class="period"></div><div id="dShot" class="shot"></div></div></div>
+      <div class="team glass"><div class="kicker" id="dAwayKicker">AWAY</div><div><div id="dAwayName" class="name away"></div><div id="dAwayScore" class="score away">0</div></div><div id="dAwayInfo" class="info"></div></div>
+    </section>
+    <section class="stage glass">
+      <video id="localVideo" playsinline></video>
+      <iframe id="ytFrame" allow="autoplay; fullscreen"></iframe>
+      <div id="fx" class="fx"></div>
+      <div id="dAnim" class="animText">READY</div>
+    </section>
+    <section class="rosters">
+      <aside class="roster glass"><h2 id="homeRosterTitle">HOME PLAYERS</h2><table><thead><tr><th>#</th><th>PLAYER</th><th>PTS</th><th>F</th></tr></thead><tbody id="dHomePlayers"></tbody></table></aside>
+      <aside class="roster glass"><h2 id="awayRosterTitle">AWAY PLAYERS</h2><table><thead><tr><th>#</th><th>PLAYER</th><th>PTS</th><th>F</th></tr></thead><tbody id="dAwayPlayers"></tbody></table></aside>
+    </section>
+  </div>
+</section>
+
+<section id="control" class="control hidden">
+  <main class="controller">
+    <div class="nav"><button onclick="showPage('menu')">Home</button><button onclick="showPage('display')">Scoreboard</button></div>
+    <h1>GameDay Live Controller</h1>
+
+    <section class="panel">
+      <h2>Game Setup</h2>
+      <label>Sport<select id="sport"><option value="basketball">Basketball</option><option value="baseball">Baseball</option><option value="pickleball">Pickleball</option></select></label>
+      <label>Theme<select id="theme"><option value="neon">Modern Neon</option><option value="classic">Classic Scoreboard</option><option value="galaxy">Galaxy</option><option value="court">Court Lights</option><option value="diamond">Baseball Diamond</option><option value="arcade">Arcade</option></select></label>
+      <label>Home Team<input id="homeName"></label>
+      <label>Away Team<input id="awayName"></label>
+      <div class="grid"><label>Game Clock<input id="clock" placeholder="08:00"></label><label>Play To Score<input id="winScore" type="number" placeholder="15"></label></div>
+      <div class="grid"><button onclick="startClock()">Start Clock</button><button onclick="stopClock()">Stop Clock</button></div>
+    </section>
+
+    <section class="panel">
+      <h2>Two-Device Sync</h2>
+      <label>Game Room Name<input id="roomName" placeholder="my-game"></label>
+      <label>Firebase Config JSON<textarea id="firebaseConfigInput" placeholder='Paste Firebase config here'></textarea></label>
+      <div class="grid">
+        <button onclick="saveFirebaseConfig()">Save Sync Settings</button>
+        <button onclick="connectFirebase()">Connect Sync</button>
+      </div>
+      <div class="grid">
+        <button onclick="disconnectFirebase()">Use This Device Only</button>
+        <button onclick="copyDisplayLink()">Copy Display Link</button>
+      </div>
+      <p class="miniHelp">Open this same file or hosted page on both devices. Use the same room name on both.</p>
+    </section>
+
+    <section id="basketballControls" class="panel sportPanel">
+      <h2>Basketball Controls</h2>
+      <div class="grid"><label>Quarter<input id="period"></label><label>Shot Clock<input id="shotClock"></label><label>Home Fouls<input id="homeFouls" type="number"></label><label>Away Fouls<input id="awayFouls" type="number"></label></div>
+      <div class="grid"><button onclick="setPeriodText('1ST QUARTER')">Q1</button><button onclick="setPeriodText('2ND QUARTER')">Q2</button><button onclick="setPeriodText('3RD QUARTER')">Q3</button><button onclick="setPeriodText('4TH QUARTER')">Q4</button></div>
+    </section>
+
+    <section id="baseballControls" class="panel sportPanel hidden">
+      <h2>Baseball Controls</h2>
+      <div class="grid"><label>Inning<input id="inning" type="number"></label><label>Top / Bottom<select id="half"><option value="TOP">Top</option><option value="BOTTOM">Bottom</option></select></label></div>
+      <div class="threeGrid"><button onclick="cycle('balls',4)">Ball +</button><button onclick="cycle('strikes',3)">Strike +</button><button onclick="cycle('outs',3)">Out +</button></div>
+    </section>
+
+    <section id="pickleballControls" class="panel sportPanel hidden">
+      <h2>Pickleball Controls</h2>
+      <div class="grid"><label>Game<input id="pickleGame" type="number"></label><label>Server<select id="pickleServer"><option value="HOME SERVER 1">Home Server 1</option><option value="HOME SERVER 2">Home Server 2</option><option value="AWAY SERVER 1">Away Server 1</option><option value="AWAY SERVER 2">Away Server 2</option></select></label></div>
+      <div class="grid"><button onclick="sideOut()">Side Out</button><button onclick="trigger('winner')">Game Point</button></div>
+    </section>
+
+    <section class="panel"><h2>Score Buttons</h2><div id="scoreButtons" class="grid"></div></section>
+    <section class="panel"><h2>Animation Preview</h2><div class="previewGrid" id="previewGrid"></div></section>
+
+    <section class="panel">
+      <h2>Players</h2>
+      <label>Team<select id="playerTeam"><option value="home">Home</option><option value="away">Away</option></select></label>
+      <label>Number<input id="playerNumber" placeholder="20"></label>
+      <label>Name<input id="playerName" placeholder="Player name"></label>
+      <div class="grid"><button onclick="addPlayer()">Add Player</button><button onclick="clearPlayers()">Clear Team</button></div>
+      <div id="playerList"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Videos</h2>
+      <label>Upload Video<input id="videoFile" type="file" accept="video/*"></label>
+      <div class="grid"><button onclick="playUploadedVideo()">Play Uploaded Video</button><button onclick="stopVideo()">Stop Video</button></div>
+      <label>YouTube Link<input id="youtubeUrl" placeholder="Paste YouTube link"></label>
+      <div class="grid"><button onclick="playYouTube()">Play YouTube</button><button onclick="stopVideo()">Clear YouTube</button></div>
+    </section>
+
+    <section class="panel">
+      <h2>Assign Videos To Animations</h2>
+      <label>Animation
+        <select id="assignAnim">
+          <option value="three">3 Pointer</option>
+          <option value="homeRun">Home Run</option>
+          <option value="strikeout">Strikeout</option>
+          <option value="timeout">Timeout</option>
+          <option value="defense">Defense</option>
+          <option value="winner">Winner</option>
+          <option value="sideout">Side Out</option>
+        </select>
+      </label>
+      <label>Upload Video For This Animation<input id="assignVideoFile" type="file" accept="video/*"></label>
+      <button onclick="assignUploadedVideo()">Save Uploaded Video To Animation</button>
+      <label>YouTube Link For This Animation<input id="assignYoutubeUrl" placeholder="Paste YouTube link"></label>
+      <button onclick="assignYouTubeVideo()">Save YouTube To Animation</button>
+      <button onclick="clearAssignedVideo()">Clear Assigned Video</button>
+    </section>
+
+    <section class="panel">
+      <h2>Custom Sounds</h2>
+      <label>Upload Buzzer<input id="sndBuzzer" type="file" accept="audio/*"></label>
+      <label>Upload Whistle<input id="sndWhistle" type="file" accept="audio/*"></label>
+      <label>Upload Cheer<input id="sndCheer" type="file" accept="audio/*"></label>
+      <label>Upload Winner Horn<input id="sndHorn" type="file" accept="audio/*"></label>
+      <div class="grid"><button onclick="sound('buzzer')">Play Buzzer</button><button onclick="sound('whistle')">Play Whistle</button><button onclick="sound('cheer')">Play Cheer</button><button onclick="sound('horn')">Play Winner Horn</button></div>
+    </section>
+
+    <section class="panel"><button class="resetBtn" onclick="resetGame()">Reset Game</button></section>
+  </main>
+</section>
+
+<div id="toast" class="toast">Updated</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script>
+const KEY="gameday-live-v11";
+let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false;
+const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
+const defaults={sport:"basketball",theme:"neon",homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,clock:"08:00",period:"1ST QUARTER",shotClock:"24",homeFouls:0,awayFouls:0,inning:1,half:"TOP",balls:0,strikes:0,outs:0,pickleGame:1,pickleServer:"HOME SERVER 1",winScore:15,homePlayers:[],awayPlayers:[],animationText:"READY",assignedVideos:{},roomName:"my-game",firebaseConfigText:""};
+let s=load();
+
+function load(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){return {...defaults}}}
+function save(){
+  localStorage.setItem(KEY,JSON.stringify(s));
+  if(syncOn && firebaseRef && !remoteApplying){
+    firebaseRef.set(s).catch(err=>toast("Sync error"));
+  }
+  render();
+}
+function showPage(p){menu.classList.toggle("hidden",p!="menu");display.classList.toggle("hidden",p!="display");control.classList.toggle("hidden",p!="control");render()}
+function toast(t){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),900)}
+function touch(btn){if(!btn)return;btn.classList.remove("flashTouch");void btn.offsetWidth;btn.classList.add("flashTouch")}
+
+function saveFirebaseConfig(){
+  s.roomName=(roomName.value||"my-game").trim().replace(/[^a-zA-Z0-9_-]/g,"-");
+  s.firebaseConfigText=firebaseConfigInput.value.trim();
+  save();
+  toast("Sync settings saved");
+}
+function connectFirebase(){
+  saveFirebaseConfig();
+  try{
+    if(!s.firebaseConfigText){toast("Paste Firebase config first");return}
+    const cfg=JSON.parse(s.firebaseConfigText);
+    if(!firebaseApp){
+      firebaseApp=firebase.initializeApp(cfg);
+      firebaseDb=firebase.database();
+    }
+    firebaseRef=firebaseDb.ref("gamedayLive/rooms/"+s.roomName);
+    syncOn=true;
+    firebaseRef.off();
+    firebaseRef.on("value", snap=>{
+      const data=snap.val();
+      if(data){
+        remoteApplying=true;
+        s={...defaults,...data,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText};
+        localStorage.setItem(KEY,JSON.stringify(s));
+        remoteApplying=false;
+        render();
+      }else{
+        save();
+      }
+    });
+    toast("Sync connected");
+  }catch(err){
+    toast("Firebase config error");
+    console.error(err);
+  }
+}
+function disconnectFirebase(){
+  syncOn=false;
+  if(firebaseRef) firebaseRef.off();
+  firebaseRef=null;
+  toast("Local mode");
+}
+function copyDisplayLink(){
+  const url=location.href.split("#")[0]+"#display";
+  navigator.clipboard?.writeText(url);
+  toast("Display link copied");
+}
+function applyStartupHash(){
+  if(location.hash==="#display") showPage("display");
+  if(location.hash==="#control") showPage("control");
+}
+
+function render(){
+  s=load();
+  display.className="display theme-"+s.theme+(display.classList.contains("hidden")?" hidden":"");
+  dHomeName.textContent=s.homeName; dAwayName.textContent=s.awayName; dHomeScore.textContent=s.homeScore; dAwayScore.textContent=s.awayScore;
+  dHomeKicker.textContent=s.sport==="pickleball"?"TEAM A":"HOME"; dAwayKicker.textContent=s.sport==="pickleball"?"TEAM B":"AWAY";
+  homeRosterTitle.textContent=s.sport==="pickleball"?"TEAM A PLAYERS":"HOME PLAYERS"; awayRosterTitle.textContent=s.sport==="pickleball"?"TEAM B PLAYERS":"AWAY PLAYERS";
+  if(s.sport==="basketball"){dClock.textContent=s.clock;dPeriod.textContent=s.period;dShot.textContent=s.shotClock;dHomeInfo.textContent=`FOULS ${s.homeFouls}`;dAwayInfo.textContent=`FOULS ${s.awayFouls}`;}
+  if(s.sport==="baseball"){dClock.textContent=s.half;dPeriod.textContent=`INNING ${s.inning}`;dShot.textContent=`B ${s.balls} S ${s.strikes} O ${s.outs}`;dHomeInfo.textContent="DUGOUT";dAwayInfo.textContent="DUGOUT";}
+  if(s.sport==="pickleball"){dClock.textContent=s.pickleServer;dPeriod.textContent=`GAME ${s.pickleGame}`;dShot.textContent=`PLAY TO ${s.winScore}`;dHomeInfo.textContent="PADDLE READY";dAwayInfo.textContent="PADDLE READY";}
+  dHomePlayers.innerHTML=rows(s.homePlayers); dAwayPlayers.innerHTML=rows(s.awayPlayers); dAnim.textContent=s.animationText;
+  ["sport","theme","homeName","awayName","clock","period","shotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","roomName"].forEach(id=>{let el=document.getElementById(id); if(el)el.value=s[id]}); if(firebaseConfigInput) firebaseConfigInput.value=s.firebaseConfigText||"";
+  renderSportPanels(); renderScoreButtons(); renderPreview(); renderPlayers();
+}
+function rows(a){return a.length?a.slice(0,6).map(p=>`<tr><td>${p.num||""}</td><td>${p.name||""}</td><td>${p.pts||0}</td><td>${p.fouls||0}</td></tr>`).join(""):`<tr><td colspan="4" style="text-align:center;opacity:.55;padding:14px">Add players</td></tr>`}
+function renderSportPanels(){document.querySelectorAll(".sportPanel").forEach(el=>el.classList.add("hidden"));document.getElementById(s.sport+"Controls").classList.remove("hidden")}
+function renderScoreButtons(){
+  let html="";
+  if(s.sport==="basketball")html=`<button class="scoreBtn" onclick="score('home',1,this)">Home +1</button><button class="scoreBtn" onclick="score('away',1,this)">Away +1</button><button class="scoreBtn" onclick="score('home',2,this)">Home +2</button><button class="scoreBtn" onclick="score('away',2,this)">Away +2</button><button class="scoreBtn" onclick="score('home',3,this,'three')">Home +3 + 3PT</button><button class="scoreBtn" onclick="score('away',3,this,'three')">Away +3 + 3PT</button><button class="scoreBtn" onclick="score('home',-1,this)">Home -1</button><button class="scoreBtn" onclick="score('away',-1,this)">Away -1</button>`;
+  if(s.sport==="baseball")html=`<button class="scoreBtn" onclick="score('home',1,this)">Home Run +1</button><button class="scoreBtn" onclick="score('away',1,this)">Away Run +1</button><button class="scoreBtn" onclick="score('home',1,this,'homeRun')">Home HR +1</button><button class="scoreBtn" onclick="score('away',1,this,'homeRun')">Away HR +1</button><button class="scoreBtn" onclick="score('home',-1,this)">Home -1</button><button class="scoreBtn" onclick="score('away',-1,this)">Away -1</button>`;
+  if(s.sport==="pickleball")html=`<button class="scoreBtn" onclick="score('home',1,this)">Team A +1</button><button class="scoreBtn" onclick="score('away',1,this)">Team B +1</button><button class="scoreBtn" onclick="score('home',-1,this)">Team A -1</button><button class="scoreBtn" onclick="score('away',-1,this)">Team B -1</button>`;
+  scoreButtons.innerHTML=html;
+}
+function renderPreview(){previewGrid.innerHTML=animsBySport[s.sport].map(([k,t])=>`<button class="preview ${k}" onclick="previewAnim('${k}')"><span>${t}</span></button>`).join("")}
+function previewAnim(type){trigger(type);toast("Preview")}
+function score(team,n,btn,anim){s[team+"Score"]=Math.max(0,s[team+"Score"]+n);touch(btn);toast((team=="home"?(s.sport==="pickleball"?"Team A":"Home"):(s.sport==="pickleball"?"Team B":"Away"))+" "+(n>0?"+":"")+n);sound("tick");if(anim)trigger(anim);checkWinner(team);save()}
+function checkWinner(team){const target=Number(s.winScore||0);if(target>0&&s[team+"Score"]>=target){const other=team==="home"?"away":"home";if(s.sport!=="pickleball"||s[team+"Score"]-s[other+"Score"]>=2){s.animationText=(team==="home"?s.homeName:s.awayName)+" WINS!";setTimeout(()=>trigger("winner"),50);sound("horn")}}}
+
+function clearFx(){fx.innerHTML="";fx.className="fx"}
+function particleBurst(type){
+  clearFx(); fx.className="fx flash";
+  const count=type==="winner"?60:32;
+  for(let i=0;i<count;i++){
+    const el=document.createElement(type==="winner"?"i":"b");
+    el.className=type==="winner"?"confetti":"particle";
+    el.style.left=(45+Math.random()*10)+"%"; el.style.top=(45+Math.random()*10)+"%";
+    el.style.setProperty("--x",(Math.random()*640-320)+"px");
+    el.style.setProperty("--y",(Math.random()*360-180)+"px");
+    el.style.background=i%2? "var(--home)" : "var(--away)";
+    fx.appendChild(el);
+  }
+  for(let i=0;i<8;i++){
+    const st=document.createElement("em");
+    st.className="streak";
+    st.style.setProperty("--sx",(Math.random()*100-50)+"vw");
+    st.style.setProperty("--sy",(Math.random()*80-40)+"vh");
+    st.style.setProperty("--ex",(Math.random()*100-50)+"vw");
+    st.style.setProperty("--ey",(Math.random()*80-40)+"vh");
+    st.style.setProperty("--rot",(Math.random()*360)+"deg");
+    fx.appendChild(st);
+  }
+  if(type==="defense"||type==="sideout"||type==="timeout"){
+    for(let i=0;i<3;i++){const r=document.createElement("u");r.className="ring";r.style.animationDelay=(i*.16)+"s";fx.appendChild(r)}
+  }
+  setTimeout(clearFx,1300);
+}
+function trigger(type){
+  stopVideo(false);
+  const usedAssignedVideo=playAssignedVideo(type);
+  const names={three:"3 POINTER!",homeRun:"HOME RUN!",strikeout:"STRIKEOUT!",timeout:"TIMEOUT",defense:"DEFENSE!",winner:"WINNER!",sideout:"SIDE OUT!"};
+  s.animationText=usedAssignedVideo?"":(names[type]||"READY"); localStorage.setItem(KEY,JSON.stringify(s));
+  particleBurst(type);
+  if(type==="three"||type==="sideout")sound("cheer"); if(type==="winner")sound("horn"); if(type==="timeout"||type==="strikeout")sound("whistle"); render();
+}
+
+function parseClock(str){let p=String(str||"0:00").split(":").map(Number);return p.length===2?p[0]*60+p[1]:Number(str)||0}
+function fmt(sec){sec=Math.max(0,sec);let m=Math.floor(sec/60),r=sec%60;return String(m).padStart(2,"0")+":"+String(r).padStart(2,"0")}
+function startClock(){stopClock(false);let sec=parseClock(s.clock);timer=setInterval(()=>{sec--;s.clock=fmt(sec);save();if(sec<=0){stopClock(false);sound("buzzer");trigger("timeout");toast("Clock ended")}},1000);toast("Clock started")}
+function stopClock(msg=true){if(timer){clearInterval(timer);timer=null;if(msg)toast("Clock stopped")}}
+function setPeriodText(t){s.period=t;save()}
+function cycle(k,max){s[k]=(Number(s[k])+1)%max;save()}
+function sideOut(){const order=["HOME SERVER 1","HOME SERVER 2","AWAY SERVER 1","AWAY SERVER 2"];s.pickleServer=order[(order.indexOf(s.pickleServer)+1)%order.length];save();trigger("sideout")}
+function addPlayer(){const team=playerTeam.value,key=team+"Players";s[key].push({num:playerNumber.value,name:playerName.value||"Player",pts:0,fouls:0});playerNumber.value="";playerName.value="";save()}
+function clearPlayers(){s[playerTeam.value+"Players"]=[];save()}
+function renderPlayers(){playerList.innerHTML=["home","away"].map(team=>`<h3>${team.toUpperCase()}</h3>`+s[team+"Players"].map((p,i)=>`<div class="playerChip"><span>#${p.num} ${p.name} — ${p.pts||0} pts / ${p.fouls||0} f</span><button onclick="pstat('${team}',${i},'pts')">PTS +</button><button onclick="pstat('${team}',${i},'fouls')">F +</button><button onclick="removeP('${team}',${i})">X</button></div>`).join("")).join("")}
+function pstat(team,i,k){s[team+"Players"][i][k]=(s[team+"Players"][i][k]||0)+1;save();toast("Player updated")}
+function removeP(team,i){s[team+"Players"].splice(i,1);save()}
+function playUploadedVideo(){const f=videoFile.files[0];if(!f){toast("Choose a video first");return}if(videoObjectUrl)URL.revokeObjectURL(videoObjectUrl);videoObjectUrl=URL.createObjectURL(f);ytFrame.classList.remove("show");ytFrame.src="";localVideo.src=videoObjectUrl;localVideo.classList.add("show");localVideo.play();dAnim.textContent=""}
+function ytId(url){let m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&?/]+)/);return m?m[1]:""}
+function playYouTube(){const id=ytId(youtubeUrl.value);if(!id){toast("Paste a valid YouTube link");return}localVideo.pause();localVideo.classList.remove("show");ytFrame.src=`https://www.youtube.com/embed/${id}?autoplay=1&mute=0&controls=1`;ytFrame.classList.add("show");dAnim.textContent=""}
+function stopVideo(showReady=true){localVideo.pause();localVideo.classList.remove("show");ytFrame.src="";ytFrame.classList.remove("show");if(showReady)dAnim.textContent=s.animationText||"READY"}
+
+function assignUploadedVideo(){
+  const key=assignAnim.value, f=assignVideoFile.files[0];
+  if(!f){toast("Choose a video first");return}
+  if(assignedVideoUrls[key])URL.revokeObjectURL(assignedVideoUrls[key]);
+  assignedVideoUrls[key]=URL.createObjectURL(f);
+  s.assignedVideos=s.assignedVideos||{};
+  s.assignedVideos[key]={type:"local"};
+  save(); toast("Video assigned");
+}
+function assignYouTubeVideo(){
+  const key=assignAnim.value, id=ytId(assignYoutubeUrl.value);
+  if(!id){toast("Paste a valid YouTube link");return}
+  s.assignedVideos=s.assignedVideos||{};
+  s.assignedVideos[key]={type:"youtube",id};
+  save(); toast("YouTube assigned");
+}
+function clearAssignedVideo(){
+  const key=assignAnim.value;
+  if(assignedVideoUrls[key])URL.revokeObjectURL(assignedVideoUrls[key]);
+  delete assignedVideoUrls[key];
+  s.assignedVideos=s.assignedVideos||{};
+  delete s.assignedVideos[key];
+  save(); toast("Assigned video cleared");
+}
+function playAssignedVideo(type){
+  const item=s.assignedVideos&&s.assignedVideos[type];
+  if(!item)return false;
+  if(item.type==="local"&&assignedVideoUrls[type]){
+    ytFrame.classList.remove("show");ytFrame.src="";
+    localVideo.src=assignedVideoUrls[type];localVideo.classList.add("show");localVideo.play();dAnim.textContent="";
+    return true;
+  }
+  if(item.type==="youtube"&&item.id){
+    localVideo.pause();localVideo.classList.remove("show");
+    ytFrame.src=`https://www.youtube.com/embed/${item.id}?autoplay=1&mute=0&controls=1`;
+    ytFrame.classList.add("show");dAnim.textContent="";
+    return true;
+  }
+  return false;
+}
+
+function resetGame(){if(confirm("Reset game?")){stopClock(false);s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore};save()}}
+["sport","theme","homeName","awayName","clock","period","shotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore","roomName"].forEach(id=>addEventListener("input",e=>{if(e.target.id===id){s[id]=e.target.type==="number"?Number(e.target.value||0):e.target.value;if(id==="sport"){stopClock(false);s.homeScore=0;s.awayScore=0;s.animationText="READY"}save()}})); addEventListener("input",e=>{if(e.target.id==="firebaseConfigInput"){s.firebaseConfigText=e.target.value;localStorage.setItem(KEY,JSON.stringify(s));}});
+[["sndBuzzer","buzzer"],["sndWhistle","whistle"],["sndCheer","cheer"],["sndHorn","horn"]].forEach(([id,key])=>addEventListener("change",e=>{if(e.target.id===id&&e.target.files[0]){if(soundUrls[key])URL.revokeObjectURL(soundUrls[key]);soundUrls[key]=URL.createObjectURL(e.target.files[0]);toast("Sound loaded")}}));
+function sound(type){
+  if(soundUrls[type]){new Audio(soundUrls[type]).play();return}
+  const A=window.AudioContext||window.webkitAudioContext;if(!A)return;const ctx=new A(),o=ctx.createOscillator(),g=ctx.createGain();o.connect(g);g.connect(ctx.destination);
+  let f=440,d=.15;if(type==="buzzer"){f=110;d=.6}else if(type==="whistle"){f=1200;d=.18}else if(type==="cheer"){f=650;d=.25}else if(type==="horn"){f=220;d=.7}else if(type==="tick"){f=750;d=.06}
+  o.frequency.setValueAtTime(f,ctx.currentTime);o.type=type==="whistle"?"sine":"square";g.gain.setValueAtTime(.15,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+d);o.start();o.stop(ctx.currentTime+d)
+}
+render(); applyStartupHash();
+</script>
+</body>
+</html>
