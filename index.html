@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v25</title>
+<title>GameDay Live Pro v26</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -390,7 +390,7 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v25";
+const KEY="gameday-live-pro-v26";
 let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false,animTimer=null;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
@@ -648,11 +648,15 @@ function winnerText(){
   return w.team+" WINS! "+w.score;
 }
 function clearAnimation(){
-  centerFx.className="centerFx";
-  centerAnimText.classList.remove("show");
-  centerAnimText.textContent="";
-  if(s.gameState!=="timeout"&&s.gameState!=="winner")forceClearVideoOverlay();
-  s.animationText="";
+  if(s.gameState==="timeout"){
+    clearTimeoutState();
+  }else{
+    centerFx.className="centerFx";
+    centerAnimText.classList.remove("show");
+    centerAnimText.textContent="";
+    if(s.gameState!=="winner")forceClearVideoOverlay();
+    s.animationText="";
+  }
   localStorage.setItem(KEY,JSON.stringify(s));
   render();
 }
@@ -677,11 +681,30 @@ function displayClock(str){
 }
 function parseClock(str){let p=String(str||"0:00").split(":").map(Number);return p.length===2?p[0]*60+p[1]:Number(str)||0}
 function fmt(sec){sec=Math.max(0,sec);let m=Math.floor(sec/60),r=sec%60;return String(m)+":"+String(r).padStart(2,"0")}
+
+function clearTimeoutState(){
+  s.gameState="";
+  s.animationText="";
+  if(typeof centerFx!=="undefined")centerFx.className="centerFx";
+  if(typeof centerAnimText!=="undefined"){
+    centerAnimText.classList.remove("show");
+    centerAnimText.textContent="";
+  }
+  if(typeof videoOverlayText!=="undefined"){
+    videoOverlayText.classList.remove("show");
+    videoOverlayText.innerHTML="";
+  }
+  if(typeof videoCheer!=="undefined"){
+    videoCheer.classList.remove("show");
+    videoCheer.classList.remove("timeoutBg");
+  }
+  if(typeof dAnim!=="undefined")dAnim.textContent="";
+}
+
 function startClock(){
   stopClock(false);
-  if(s.gameState==="timeout" || videoOverlayText.classList.contains("show")){
-    s.gameState=s.gameState==="winner"?"winner":"";
-    if(s.gameState!=="winner")forceClearVideoOverlay();
+  if(s.gameState==="timeout" || (typeof centerAnimText!=="undefined" && centerAnimText.textContent==="TIMEOUT")){
+    clearTimeoutState();
   }
   dAnim.textContent="";
   s.animationText="";
