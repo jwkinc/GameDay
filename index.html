@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v28</title>
+<title>GameDay Live Pro v29</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -220,6 +220,7 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 @keyframes videoCelebrationPulse{50%{opacity:.38}}
 @keyframes timeoutSweep{to{transform:translateX(44px)}}
 
+body.controllerLocked .scoreBtn,body.controllerLocked #scoreButtons button,body.controllerLocked .resetBtn{opacity:.45;pointer-events:none}.lockedBadge{display:inline-block;padding:8px 12px;border-radius:999px;background:#ff303033;border:1px solid #ff303066;font-weight:1000}.unlockedBadge{display:inline-block;padding:8px 12px;border-radius:999px;background:#00d08433;border:1px solid #00d08466;font-weight:1000}
 </style>
 </head>
 <body>
@@ -235,6 +236,9 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
       <button id="roomCourt3" onclick="setRoom('Court 3')">Court 3</button>
     </div>
 
+    <label class="roomLabel">Room PIN
+      <input id="quickPin" type="password" inputmode="numeric" placeholder="Enter PIN">
+    </label>
     <div class="menuGrid">
       <button class="big" onclick="quickOpen('display')">Open Scoreboard</button>
       <button class="big blue" onclick="quickOpen('control')">Open Controller</button>
@@ -249,7 +253,7 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
         <button onclick="saveFirebaseConfig()">Save Admin Settings</button>
         <button onclick="connectFirebase()">Connect Sync</button>
       </div>
-      <p class="miniHelp">Most users do not need this. The Firebase config is already built in.</p>
+      <label>Room PIN<input id="adminRoomPin" type="password" inputmode="numeric" placeholder="1425"></label><p class="miniHelp">Most users do not need this. The Firebase config is already built in.</p>
     </section>
   </div>
 </section>
@@ -282,6 +286,14 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
   <main class="controller">
     <div class="nav"><button onclick="showPage('menu')">Home</button><button onclick="showPage('display')">Scoreboard</button></div>
     <h1>GameDay Live Controller</h1>
+    <section class="panel">
+      <h2>Security</h2>
+      <div id="lockStatus" class="miniHelp">Controller unlocked</div>
+      <label>Room PIN<input id="controllerPin" type="password" inputmode="numeric" placeholder="Enter PIN"></label>
+      <div class="grid"><button onclick="unlockController()">Unlock Controller</button><button onclick="lockController()">Lock Controller</button></div>
+      <div class="grid"><button onclick="exportGame()">Export Backup</button><button onclick="importFile.click()">Import Backup</button></div>
+      <input id="importFile" type="file" accept="application/json" style="display:none">
+    </section>
 
     <section class="panel">
       <h2>Game Setup</h2>
@@ -389,12 +401,13 @@ textarea{width:100%;min-height:130px;border:1px solid #ffffff2b;border-radius:13
 
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v28";
-let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseRef=null,remoteApplying=false,syncOn=false,animTimer=null,lastAnimationEventId=null,lastScorePulseEventId=null,lastResetEventId=null;
+const KEY="gameday-live-pro-v29";
+let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseAuth=null,firebaseRef=null,remoteApplying=false,syncOn=false,animTimer=null,lastAnimationEventId=null,lastScorePulseEventId=null,lastResetEventId=null;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
-const defaults={sport:"basketball",theme:"neon",homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,clock:"08:00",period:"1ST QUARTER",shotClock:"24",showShotClock:"yes",homeFouls:0,awayFouls:0,inning:1,half:"TOP",balls:0,strikes:0,outs:0,pickleGame:1,pickleServer:"HOME SERVER 1",winScore:15,homePlayers:[],awayPlayers:[],animationText:"",assignedVideos:{},gameState:"",animationEvent:null,scorePulseEvent:null,resetEvent:null,roomName:"Court 1",firebaseConfigText:DEFAULT_FIREBASE_CONFIG_TEXT};
+const defaults={sport:"basketball",theme:"neon",homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,clock:"08:00",period:"1ST QUARTER",shotClock:"24",showShotClock:"yes",homeFouls:0,awayFouls:0,inning:1,half:"TOP",balls:0,strikes:0,outs:0,pickleGame:1,pickleServer:"HOME SERVER 1",winScore:15,homePlayers:[],awayPlayers:[],animationText:"",assignedVideos:{},gameState:"",animationEvent:null,scorePulseEvent:null,resetEvent:null,roomPin:"1425",controllerLocked:false,roomName:"Court 1",firebaseConfigText:DEFAULT_FIREBASE_CONFIG_TEXT};
 let s=load();
 
 function load(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){return {...defaults}}}
@@ -411,6 +424,17 @@ function toast(t){const el=document.getElementById("toast");el.textContent=t;el.
 function touch(btn){if(!btn)return;btn.classList.remove("flashTouch");void btn.offsetWidth;btn.classList.add("flashTouch")}
 
 
+
+function pinOk(){
+  const typed=(typeof controllerPin!=="undefined"&&controllerPin.value)||(typeof quickPin!=="undefined"&&quickPin.value)||"";
+  return String(typed)===String(s.roomPin||"1425");
+}
+function unlockController(){if(!pinOk()){toast("Wrong PIN");return}s.controllerLocked=false;localStorage.setItem(KEY,JSON.stringify(s));render();toast("Controller unlocked")}
+function lockController(){s.controllerLocked=true;localStorage.setItem(KEY,JSON.stringify(s));render();toast("Controller locked")}
+function requireUnlocked(){if(s.controllerLocked){toast("Controller locked");return false}return true}
+function exportGame(){const blob=new Blob([JSON.stringify(s,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="gameday-backup-"+(s.roomName||"court")+".json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function importGameFile(file){if(!file)return;const r=new FileReader();r.onload=()=>{try{s={...defaults,...JSON.parse(r.result),roomName:s.roomName,firebaseConfigText:s.firebaseConfigText};save();toast("Game imported")}catch(e){toast("Import failed")}};r.readAsText(file)}
+
 function roomKey(name){
   return (name||"Court 1").trim().replace(/[^a-zA-Z0-9_-]/g,"-") || "Court-1";
 }
@@ -424,6 +448,11 @@ function setRoom(name){
 
 function quickOpen(mode){
   s.roomName=roomKey(s.roomName||"Court 1");
+  if(mode==="control"){
+    const pin=(typeof quickPin!=="undefined"&&quickPin.value)||"";
+    if(String(pin)!==String(s.roomPin||"1425")){toast("Enter room PIN");return}
+    s.controllerLocked=false;
+  }
   s.firebaseConfigText=s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
   localStorage.setItem(KEY,JSON.stringify(s));
   connectFirebase(true);
@@ -441,50 +470,31 @@ function toggleAdmin(){
 function saveFirebaseConfig(){
   s.roomName=roomKey((typeof roomName!=="undefined"&&roomName.value)||((typeof quickRoom!=="undefined"&&quickRoom.value)||s.roomName||"Court 1"));
   s.firebaseConfigText=(typeof firebaseConfigInput!=="undefined"&&firebaseConfigInput.value.trim())||s.firebaseConfigText||DEFAULT_FIREBASE_CONFIG_TEXT;
-  save();
-  toast("Settings saved");
+  if(typeof adminRoomPin!=="undefined"&&adminRoomPin.value.trim())s.roomPin=adminRoomPin.value.trim();
+  save();toast("Settings saved");
 }
 function connectFirebase(silent=false){
   saveFirebaseConfig();
   try{
-    if(!s.firebaseConfigText){toast("Paste Firebase config first");return}
+    if(!s.firebaseConfigText){if(!silent)toast("Firebase config missing");return}
     const cfg=JSON.parse(s.firebaseConfigText);
-    if(!firebaseApp){
-      firebaseApp=firebase.initializeApp(cfg);
-      firebaseDb=firebase.database();
-    }
-    firebaseRef=firebaseDb.ref("gamedayLive/rooms/"+s.roomName);
-    syncOn=true;
-    firebaseRef.off();
-    firebaseRef.on("value", snap=>{
-      const data=snap.val();
-      if(data){
-        remoteApplying=true;
-        const incomingEvent=data.animationEvent;
-        const incomingPulse=data.scorePulseEvent;
-        const incomingReset=data.resetEvent;
-        s={...defaults,...data,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText};
-        localStorage.setItem(KEY,JSON.stringify(s));
-        remoteApplying=false;
-        render();
-        if(incomingReset&&incomingReset.id&&incomingReset.id!==lastResetEventId){
-          setTimeout(()=>handleRemoteReset(incomingReset.id),10);
-        }
-        if(incomingPulse&&incomingPulse.id&&incomingPulse.id!==lastScorePulseEventId){
-          setTimeout(()=>pulseScore(incomingPulse.team,incomingPulse.id),20);
-        }
-        if(incomingEvent&&incomingEvent.id&&incomingEvent.id!==lastAnimationEventId){
-          setTimeout(()=>runAnimation(incomingEvent.type,incomingEvent.id),25);
-        }
-      }else{
-        save();
-      }
-    });
-    if(!silent)toast("Sync connected");
-  }catch(err){
-    if(!silent)toast("Firebase config error");
-    console.error(err);
-  }
+    if(!firebaseApp){firebaseApp=firebase.initializeApp(cfg);firebaseAuth=firebase.auth();firebaseDb=firebase.database();}
+    firebaseAuth.signInAnonymously().then(()=>{
+      firebaseRef=firebaseDb.ref("gamedayLive/rooms/"+s.roomName);
+      syncOn=true;firebaseRef.off();
+      firebaseRef.on("value",snap=>{
+        const data=snap.val();
+        if(data){
+          const incomingEvent=data.animationEvent,incomingPulse=data.scorePulseEvent,incomingReset=data.resetEvent;
+          remoteApplying=true;s={...defaults,...data,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText};localStorage.setItem(KEY,JSON.stringify(s));remoteApplying=false;render();
+          if(incomingReset&&incomingReset.id&&incomingReset.id!==lastResetEventId)setTimeout(()=>handleRemoteReset(incomingReset.id),10);
+          if(incomingPulse&&incomingPulse.id&&incomingPulse.id!==lastScorePulseEventId)setTimeout(()=>pulseScore(incomingPulse.team,incomingPulse.id),20);
+          if(incomingEvent&&incomingEvent.id&&incomingEvent.id!==lastAnimationEventId)setTimeout(()=>runAnimation(incomingEvent.type,incomingEvent.id),25);
+        }else save();
+      });
+      if(!silent)toast("Secure sync connected");
+    }).catch(err=>{if(!silent)toast("Auth failed");console.error(err)});
+  }catch(err){if(!silent)toast("Firebase config error");console.error(err)}
 }
 function disconnectFirebase(){
   syncOn=false;
@@ -520,6 +530,9 @@ function render(){
   }
   if(s.gameState==="timeout")showVideoOverlay("TIMEOUT",false);
   if(s.gameState==="winner")showVideoOverlay(winnerOverlayHtml(),true);
+  document.body.classList.toggle("controllerLocked",!!s.controllerLocked);
+  if(typeof lockStatus!=="undefined")lockStatus.innerHTML=s.controllerLocked?'<span class="lockedBadge">Controller locked</span>':'<span class="unlockedBadge">Controller unlocked</span>';
+  if(typeof adminRoomPin!=="undefined")adminRoomPin.value=s.roomPin||"1425";
 }
 function rows(a){return a.length?a.slice(0,6).map(p=>`<tr><td>${p.num||""}</td><td>${p.name||""}</td><td>${p.pts||0}</td><td>${p.fouls||0}</td></tr>`).join(""):`<tr><td colspan="4" style="text-align:center;opacity:.55;padding:14px">Add players</td></tr>`}
 function renderSportPanels(){document.querySelectorAll(".sportPanel").forEach(el=>el.classList.add("hidden"));document.getElementById(s.sport+"Controls").classList.remove("hidden")}
@@ -550,18 +563,10 @@ function pulseScore(team,eventId){
 }
 
 function score(team,n,btn,anim){
+  if(!requireUnlocked())return;
   s[team+"Score"]=Math.max(0,s[team+"Score"]+n);
-  if(n>0){
-    const pid=Date.now()+"-"+Math.random().toString(36).slice(2);
-    s.scorePulseEvent={team:team,id:pid};
-    pulseScore(team,pid);
-  }
-  touch(btn);
-  toast((team=="home"?(s.sport==="pickleball"?"Team A":"Home"):(s.sport==="pickleball"?"Team B":"Away"))+" "+(n>0?"+":"")+n);
-  sound("tick");
-  if(anim)trigger(anim);
-  checkWinner(team);
-  save();
+  if(n>0){const pid=Date.now()+"-"+Math.random().toString(36).slice(2);s.scorePulseEvent={team:team,id:pid};pulseScore(team,pid)}
+  touch(btn);toast((team=="home"?(s.sport==="pickleball"?"Team A":"Home"):(s.sport==="pickleball"?"Team B":"Away"))+" "+(n>0?"+":"")+n);sound("tick");if(anim)trigger(anim);checkWinner(team);save();
 }
 function checkWinner(team){
   const target=Number(s.winScore||0);
@@ -602,10 +607,9 @@ function particleBurst(type){
   setTimeout(clearFx,1300);
 }
 function trigger(type){
+  if(!requireUnlocked())return;
   s.animationEvent={type:type,id:Date.now()+"-"+Math.random().toString(36).slice(2)};
-  localStorage.setItem(KEY,JSON.stringify(s));
-  save();
-  runAnimation(type,s.animationEvent.id);
+  localStorage.setItem(KEY,JSON.stringify(s));save();runAnimation(type,s.animationEvent.id);
 }
 function runAnimation(type,eventId){
   if(eventId&&eventId===lastAnimationEventId)return;
@@ -793,6 +797,9 @@ function playUploadedVideo(){
   }
   if(s.gameState==="timeout")showVideoOverlay("TIMEOUT",false);
   if(s.gameState==="winner")showVideoOverlay(winnerOverlayHtml(),true);
+  document.body.classList.toggle("controllerLocked",!!s.controllerLocked);
+  if(typeof lockStatus!=="undefined")lockStatus.innerHTML=s.controllerLocked?'<span class="lockedBadge">Controller locked</span>':'<span class="unlockedBadge">Controller unlocked</span>';
+  if(typeof adminRoomPin!=="undefined")adminRoomPin.value=s.roomPin||"1425";
   toast("Video playing");
 }
 function ytId(url){let m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&?/]+)/);return m?m[1]:""}
@@ -870,17 +877,13 @@ function clearLogo(team){
 }
 
 function resetGame(){
+  if(!requireUnlocked())return;
   if(confirm("Reset game?")){
     stopClock(false);
     const rid=Date.now()+"-"+Math.random().toString(36).slice(2);
-    s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText,homeLogo:s.homeLogo,awayLogo:s.awayLogo};
-    s.gameState="";
-    s.animationEvent=null;
-    s.scorePulseEvent=null;
-    s.resetEvent={id:rid};
-    hardClearGameVisuals();
-    localStorage.setItem(KEY,JSON.stringify(s));
-    save();
+    s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText,homeLogo:s.homeLogo,awayLogo:s.awayLogo,roomPin:s.roomPin,controllerLocked:false};
+    s.gameState="";s.animationEvent=null;s.scorePulseEvent=null;s.resetEvent={id:rid};
+    hardClearGameVisuals();localStorage.setItem(KEY,JSON.stringify(s));save();
   }
 }
 ["sport","theme","homeName","awayName","clock","period","shotClock","showShotClock","homeFouls","awayFouls","inning","half","pickleGame","pickleServer","winScore"].forEach(id=>addEventListener("input",e=>{if(e.target.id===id){s[id]=e.target.type==="number"?Number(e.target.value||0):e.target.value;if(id==="sport"){stopClock(false);s.homeScore=0;s.awayScore=0;s.animationText="READY"}save()}})); addEventListener("input",e=>{if(e.target.id==="firebaseConfigInput"){s.firebaseConfigText=e.target.value;localStorage.setItem(KEY,JSON.stringify(s));} if(e.target.id==="quickRoom"){s.roomName=roomKey(e.target.value);localStorage.setItem(KEY,JSON.stringify(s));}});
@@ -897,6 +900,7 @@ addEventListener("change",e=>{
   if(e.target.id==="awayLogoFile")readLogoFile(e.target.files[0],"away");
 });
 
+if(typeof importFile!=="undefined")importFile.addEventListener("change",e=>importGameFile(e.target.files[0]));
 render(); applyStartupHash();
 </script>
 </body>
