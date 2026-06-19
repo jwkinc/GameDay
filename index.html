@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v31</title>
+<title>GameDay Live Pro v32</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -261,6 +261,53 @@ body.controllerLocked .scoreBtn,body.controllerLocked #scoreButtons button,body.
   .center .clock{font-size:clamp(42px,20cqw,100px)!important}
 }
 
+
+/* v32 responsive fit + optional video screen */
+.teamLogoBg{opacity:.10}
+.team,.center{overflow:hidden!important}
+.score{ text-shadow:none!important; filter:none!important; }
+.name{ text-shadow:none!important; filter:none!important; }
+.clock{ text-shadow:none!important; filter:none!important; }
+.team .score{
+  font-size:min(34cqw,28vh)!important;
+  line-height:.78!important;
+  max-height:62%;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  padding:0!important;
+  margin:0!important;
+}
+.team .name{
+  font-size:min(10cqw,8.8vh)!important;
+  line-height:.88!important;
+  max-height:22%;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  text-overflow:ellipsis!important;
+}
+.center .clock{
+  font-size:min(25cqw,13vh)!important;
+  line-height:.85!important;
+  overflow:hidden!important;
+}
+.center .period{font-size:min(5.6cqw,3.2vh)!important;line-height:1!important}
+.center .shot{font-size:min(6cqw,3.8vh)!important;line-height:1!important}
+.panelMotion{display:none!important}
+.panelMotion:before,.panelMotion:after{display:none!important}
+.display.videoHidden .board{grid-template-rows:48vh 0 48vh!important;gap:8px!important}
+.display.videoHidden .stage{display:none!important}
+.display.videoHidden .players{min-height:0!important}
+.display.videoHidden .team .score{font-size:min(38cqw,34vh)!important}
+.display.videoHidden .team .name{font-size:min(11cqw,10vh)!important}
+.display.videoHidden .center .clock{font-size:min(28cqw,16vh)!important}
+@media(max-width:900px){
+  .team .score{font-size:min(31cqw,23vh)!important}
+  .team .name{font-size:min(9cqw,7vh)!important}
+  .center .clock{font-size:min(23cqw,11vh)!important}
+}
+
 </style>
 </head>
 <body>
@@ -338,7 +385,7 @@ body.controllerLocked .scoreBtn,body.controllerLocked #scoreButtons button,body.
     <section class="panel">
       <h2>Game Setup</h2>
       <label>Sport<select id="sport"><option value="basketball">Basketball</option><option value="baseball">Baseball</option><option value="pickleball">Pickleball</option></select></label>
-      <label>Theme<select id="theme"><option value="neon">Modern Neon</option><option value="classic">Classic Scoreboard</option><option value="galaxy">Galaxy</option><option value="court">Court Lights</option><option value="diamond">Baseball Diamond</option><option value="arcade">Arcade</option></select></label>
+      <label>Show Video Screen<select id="showVideoPanel"><option value="yes">Yes</option><option value="no">No</option></select></label><label>Theme<select id="theme"><option value="neon">Modern Neon</option><option value="classic">Classic Scoreboard</option><option value="galaxy">Galaxy</option><option value="court">Court Lights</option><option value="diamond">Baseball Diamond</option><option value="arcade">Arcade</option></select></label>
       <label>Home Team<input id="homeName"></label>
       <label>Away Team<input id="awayName"></label>
       <div class="grid"><label>Game Clock<input id="clock" placeholder="08:00"></label><label>Play To Score<input id="winScore" type="number" placeholder="15"></label></div>
@@ -443,11 +490,11 @@ body.controllerLocked .scoreBtn,body.controllerLocked #scoreButtons button,body.
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v31";
+const KEY="gameday-live-pro-v32";
 let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseAuth=null,firebaseRef=null,remoteApplying=false,syncOn=false,animTimer=null,lastAnimationEventId=null,lastScorePulseEventId=null,lastResetEventId=null;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
-const defaults={sport:"basketball",theme:"neon",homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,clock:"08:00",period:"1ST QUARTER",shotClock:"24",showShotClock:"yes",homeFouls:0,awayFouls:0,inning:1,half:"TOP",balls:0,strikes:0,outs:0,pickleGame:1,pickleServer:"HOME SERVER 1",winScore:15,homePlayers:[],awayPlayers:[],animationText:"",assignedVideos:{},gameState:"",animationEvent:null,scorePulseEvent:null,resetEvent:null,roomPin:"1425",controllerLocked:false,roomName:"Court 1",firebaseConfigText:DEFAULT_FIREBASE_CONFIG_TEXT};
+const defaults={sport:"basketball",theme:"neon",homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,clock:"08:00",period:"1ST QUARTER",shotClock:"24",showShotClock:"yes",homeFouls:0,awayFouls:0,inning:1,half:"TOP",balls:0,strikes:0,outs:0,pickleGame:1,pickleServer:"HOME SERVER 1",winScore:15,homePlayers:[],awayPlayers:[],animationText:"",assignedVideos:{},gameState:"",animationEvent:null,scorePulseEvent:null,resetEvent:null,roomPin:"1425",controllerLocked:false,showVideoPanel:"yes",roomName:"Court 1",firebaseConfigText:DEFAULT_FIREBASE_CONFIG_TEXT};
 let s=load();
 
 function load(){try{return {...defaults,...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch(e){return {...defaults}}}
@@ -921,7 +968,7 @@ function resetGame(){
   if(confirm("Reset game?")){
     stopClock(false);
     const rid=Date.now()+"-"+Math.random().toString(36).slice(2);
-    s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText,homeLogo:s.homeLogo,awayLogo:s.awayLogo,roomPin:s.roomPin,controllerLocked:false};
+    s={...defaults,sport:s.sport,theme:s.theme,homeName:s.homeName,awayName:s.awayName,winScore:s.winScore,roomName:s.roomName,firebaseConfigText:s.firebaseConfigText,homeLogo:s.homeLogo,awayLogo:s.awayLogo,roomPin:s.roomPin,controllerLocked:false,showVideoPanel:"yes"};
     s.gameState="";s.animationEvent=null;s.scorePulseEvent=null;s.resetEvent={id:rid};
     hardClearGameVisuals();localStorage.setItem(KEY,JSON.stringify(s));save();
   }
@@ -941,6 +988,7 @@ addEventListener("change",e=>{
 });
 
 if(typeof importFile!=="undefined")importFile.addEventListener("change",e=>importGameFile(e.target.files[0]));
+if(typeof showVideoPanel!=="undefined")showVideoPanel.addEventListener("change",()=>{s.showVideoPanel=showVideoPanel.value;save();});
 render(); applyStartupHash();
 </script>
 </body>
