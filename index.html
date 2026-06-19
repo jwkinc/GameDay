@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>GameDay Live Pro v30</title>
+<title>GameDay Live Pro v31</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#05070d;color:white;overflow:hidden}
@@ -225,22 +225,41 @@ body.controllerLocked .scoreBtn,body.controllerLocked #scoreButtons button,body.
 /* v30 visual polish */
 .topScore .glass,.stage.glass{border-color:transparent!important;box-shadow:none!important}
 .team,.center{isolation:isolate}
-.panelMotion{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.26;overflow:hidden}
-.panelMotion:before,.panelMotion:after{content:"";position:absolute;inset:-35%;opacity:.75}
+.panelMotion{display:none!important}
+.panelMotion:before,.panelMotion:after{display:none!important}
 .team .kicker,.team .name,.team .score,.team .info,.center .clockLayer,.center .centerFx,.center .retroAnimText{position:relative;z-index:2}
 .team.homePanel .info{text-align:right;align-self:end;justify-self:stretch;padding-right:clamp(8px,1.2vw,18px)}
 .team.awayPanel .info{text-align:left;align-self:end;justify-self:stretch;padding-left:clamp(8px,1.2vw,18px)}
-.display.theme-neon .panelMotion:before{background:radial-gradient(circle at 20% 30%,var(--home) 0 4%,transparent 18%),radial-gradient(circle at 80% 70%,var(--away) 0 4%,transparent 20%);animation:panelFloat 9s ease-in-out infinite}
-.display.theme-classic .panelMotion:before{background:repeating-linear-gradient(90deg,#f5c16c28 0 2px,transparent 2px 24px);animation:panelSlide 12s linear infinite}
-.display.theme-galaxy .panelMotion:before{background:radial-gradient(circle at 20% 20%,#fff8 0 1px,transparent 2px),radial-gradient(circle at 60% 70%,#fff8 0 1px,transparent 2px),radial-gradient(circle at 78% 30%,#a78bfa66 0 5%,transparent 22%);animation:panelDrift 14s linear infinite}
-.display.theme-court .panelMotion:before{background:linear-gradient(90deg,transparent 46%,#ffffff20 50%,transparent 54%),radial-gradient(circle,#fdba7444,transparent 38%);animation:panelPulse 4s ease-in-out infinite}
-.display.theme-diamond .panelMotion:before{background:linear-gradient(45deg,transparent 48%,#86efac35 50%,transparent 52%),radial-gradient(circle at 50% 55%,#22c55e44,transparent 32%);animation:panelSlide 10s linear infinite}
-.display.theme-arcade .panelMotion:before{background:repeating-linear-gradient(0deg,#00e5ff25 0 2px,transparent 2px 14px),repeating-linear-gradient(90deg,#ff3df222 0 2px,transparent 2px 18px);animation:panelScan 2.5s linear infinite}
+
+
+
+
+
+
 @keyframes panelFloat{50%{transform:translate(4%, -3%) scale(1.08)}}
 @keyframes panelSlide{to{transform:translateX(90px)}}
 @keyframes panelDrift{to{transform:translate(60px,-28px)}}
 @keyframes panelPulse{50%{transform:scale(1.06);opacity:.45}}
 @keyframes panelScan{to{transform:translateY(20px)}}
+
+
+/* v31 responsive sizing */
+.topScore{grid-template-columns:minmax(0,1fr) minmax(180px,.72fr) minmax(0,1fr)!important}
+.team{container-type:inline-size;min-width:0}
+.team .name{font-size:clamp(30px,8cqw,92px)!important}
+.team .score{font-size:clamp(86px,23cqw,235px)!important;line-height:.82!important}
+.center{container-type:inline-size}
+.center .clock{font-size:clamp(56px,22cqw,150px)!important;line-height:.84!important}
+.center .period{font-size:clamp(16px,5cqw,34px)!important}
+.center .shot{font-size:clamp(18px,6cqw,42px)!important}
+.clockLayer{width:100%;max-width:100%;transform:translateY(-8%)!important}
+.name,.score,.clock,.period,.shot{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:900px){
+  .topScore{grid-template-columns:minmax(0,1fr) minmax(130px,.7fr) minmax(0,1fr)!important}
+  .team .name{font-size:clamp(22px,7.5cqw,58px)!important}
+  .team .score{font-size:clamp(62px,21cqw,150px)!important}
+  .center .clock{font-size:clamp(42px,20cqw,100px)!important}
+}
 
 </style>
 </head>
@@ -424,7 +443,7 @@ body.controllerLocked .scoreBtn,body.controllerLocked #scoreButtons button,body.
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script>
-const KEY="gameday-live-pro-v30";
+const KEY="gameday-live-pro-v31";
 let videoObjectUrl="",soundUrls={},timer=null,toastTimer=null,assignedVideoUrls={},firebaseApp=null,firebaseDb=null,firebaseAuth=null,firebaseRef=null,remoteApplying=false,syncOn=false,animTimer=null,lastAnimationEventId=null,lastScorePulseEventId=null,lastResetEventId=null;
 const DEFAULT_FIREBASE_CONFIG_TEXT='{\n  "apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA",\n  "authDomain": "gameday-22.firebaseapp.com",\n  "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com",\n  "projectId": "gameday-22",\n  "storageBucket": "gameday-22.firebasestorage.app",\n  "messagingSenderId": "407561255571",\n  "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66"\n}';
 const animsBySport={basketball:[["three","3 POINTER"],["timeout","TIMEOUT"],["defense","DEFENSE"],["winner","WINNER"]],baseball:[["homeRun","HOME RUN"],["strikeout","STRIKEOUT"],["timeout","TIMEOUT"],["winner","WINNER"]],pickleball:[["sideout","SIDE OUT"],["defense","NICE DINK"],["timeout","TIMEOUT"],["winner","GAME POINT"]]};
