@@ -1,7 +1,7 @@
 <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>GameDay Live</title><style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;background:#020305;color:white;font-family:system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
 .home{height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(rgba(4,9,18,.45),rgba(4,9,18,.60)),url("assets/login-bg.png") center center / cover no-repeat}.homeCard{width:min(900px,94vw);padding:clamp(28px,5vw,60px);border:1px solid #ffffff24;border-radius:24px;background:linear-gradient(180deg,rgba(16,23,37,.88),rgba(7,9,16,.92));backdrop-filter:blur(2px);text-align:center;box-shadow:0 30px 90px #000c}.badge{display:inline-block;padding:10px 22px;border:1px solid #ffffff30;border-radius:999px;background:#ffffff12;letter-spacing:.22em;font-weight:1000}h1{font-family:Impact,Arial Black,sans-serif;font-size:clamp(56px,8vw,110px);line-height:.9;margin:24px 0 12px}.home p{font-size:clamp(18px,2.4vw,28px);opacity:.84}.pin{width:min(520px,100%);margin:16px auto;text-align:left}.pin label{font-weight:1000}.pin input{width:100%;margin-top:8px;min-height:58px;border-radius:14px;border:1px solid #ffffff32;background:#0d1320;color:white;text-align:center;font-size:28px;font-weight:1000}.homeBtns{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}.homeBtns button{min-height:76px;border:0;border-radius:18px;color:white;font-family:Impact,Arial Black,sans-serif;font-size:clamp(24px,3vw,34px);box-shadow:inset 0 1px 0 #fff5,0 14px 34px #0009;text-transform:uppercase}.scoreBtn{background:linear-gradient(135deg,#ff7a00,#ff2f7a)}.ctrlBtnHome{background:linear-gradient(135deg,#1e90ff,#00d084)}
-.scoreboard{height:100vh;padding:8px;background:#020403;display:grid;grid-template-rows:minmax(224px,38vh) minmax(248px,40vh) minmax(110px,1fr);gap:8px}.top{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(150px,.72fr) minmax(0,1.08fr);gap:8px}.panel{position:relative;background:#030508f4;border:1px solid #ffffff1b;border-radius:6px;overflow:hidden}.team{display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;align-items:center;justify-items:center;padding:8px 10px 6px;color:var(--c)}.kicker{font-weight:1000;letter-spacing:.25em;color:#ddd;font-size:clamp(12px,1.2vw,20px)}.name{font-family:Impact,Arial Black,sans-serif;font-size:clamp(22px,3.4vw,60px);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96%;text-shadow:0 2px 0 #000,0 0 10px currentColor;margin-top:clamp(3px,.7vh,11px)}.score{font-family:Impact,Arial Black,sans-serif;font-size:min(24vw,29vh,460px);line-height:.75;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;align-self:center;width:100%;height:100%;text-shadow:0 0 5px currentColor,0 0 18px currentColor}.fouls{font-weight:1000;color:#fff;font-size:clamp(13px,1.35vw,20px);align-self:end;margin:6px 8px 4px}.homeTeam .fouls{justify-self:end}.awayTeam .fouls{justify-self:start}.clockPanel{display:grid;align-items:start;justify-items:center;padding:8px 10px 10px}.clockBox{width:96%;height:clamp(96px,14.5vh,168px);min-height:clamp(96px,14.5vh,168px);border:3px solid #fff;border-radius:4px;background:#000;display:flex;align-items:center;justify-content:center;margin-top:clamp(4px,.8vh,10px);padding:4px 8px}.clock{font-family:Impact,Arial Black,sans-serif;font-size:clamp(61px,7.63vw,144px);line-height:1;color:#fff;white-space:nowrap;transform:scaleX(.83);text-shadow:0 0 2px #ff4040,0 0 5px #ff4040}.period{display:flex;gap:.65em;align-items:baseline;margin-top:clamp(10px,1.4vh,18px);font-family:Impact,Arial Black,sans-serif;font-size:clamp(20px,2.4vw,38px)}.period b{color:#ff3030;text-shadow:0 0 5px #ff3030}.shot{margin-top:clamp(8px,1.2vh,14px);font-family:Impact,Arial Black,sans-serif;font-size:clamp(28px,3.4vw,56px);color:#ff3030;text-shadow:0 0 7px #ff3030}
+.scoreboard{height:100vh;padding:10px;background:#020403;display:grid;grid-template-rows:minmax(224px,38vh) minmax(248px,40vh) minmax(110px,1fr);gap:12px}.top{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(150px,.72fr) minmax(0,1.08fr);gap:12px}.panel{position:relative;background:#030508f4;border:1px solid #ffffff1b;border-radius:6px;overflow:hidden}.team{display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;align-items:center;justify-items:center;padding:8px 10px 6px;color:var(--c)}.kicker{font-weight:1000;letter-spacing:.25em;color:#ddd;font-size:clamp(12px,1.2vw,20px)}.name{font-family:Impact,Arial Black,sans-serif;font-size:clamp(22px,3.4vw,60px);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96%;text-shadow:0 2px 0 #000,0 0 10px currentColor;margin-top:clamp(3px,.7vh,11px)}.score{font-family:Impact,Arial Black,sans-serif;font-size:min(24vw,29vh,460px);line-height:.75;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;align-self:center;width:100%;height:100%;text-shadow:0 0 5px currentColor,0 0 18px currentColor}.fouls{font-weight:1000;color:#fff;font-size:clamp(13px,1.35vw,20px);align-self:end;margin:6px 8px 4px}.homeTeam .fouls{justify-self:end}.awayTeam .fouls{justify-self:start}.clockPanel{display:grid;align-items:start;justify-items:center;padding:8px 10px 10px}.clockBox{width:96%;height:clamp(96px,14.5vh,168px);min-height:clamp(96px,14.5vh,168px);border:3px solid #fff;border-radius:4px;background:#000;display:flex;align-items:center;justify-content:center;margin-top:clamp(4px,.8vh,10px);padding:4px 8px}.clock{font-family:Impact,Arial Black,sans-serif;font-size:clamp(61px,7.63vw,144px);line-height:1;color:#fff;white-space:nowrap;transform:scaleX(.83);text-shadow:0 0 2px #ff4040,0 0 5px #ff4040}.period{display:flex;gap:.65em;align-items:baseline;margin-top:clamp(10px,1.4vh,18px);font-family:Impact,Arial Black,sans-serif;font-size:clamp(20px,2.4vw,38px)}.period b{color:#ff3030;text-shadow:0 0 5px #ff3030}.shot{margin-top:clamp(8px,1.2vh,14px);font-family:Impact,Arial Black,sans-serif;font-size:clamp(28px,3.4vw,56px);color:#ff3030;text-shadow:0 0 7px #ff3030}
 .stage{position:relative;background:#000;border:1px solid #ffffff22;border-radius:6px;overflow:hidden}.stageBg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;z-index:0;pointer-events:none}.stage.img .stageBg{opacity:1;animation:stagePulse 4.68s ease-in-out infinite}.stage.vsMode .stageBg{animation:stagePulseVs 3.74s ease-in-out infinite}@keyframes stagePulse{0%,100%{transform:scale(1);filter:brightness(1) contrast(1.02)}50%{transform:scale(1.029);filter:brightness(1.069) contrast(1.069)}}@keyframes stagePulseVs{0%,100%{transform:scale(1);filter:brightness(1) contrast(1.03)}50%{transform:scale(1.046);filter:brightness(1.115) contrast(1.104)}}.vsTeams{position:absolute;inset:0;display:none;align-items:center;justify-content:space-between;padding:clamp(10px,2.6vw,48px);font-family:"Arial Black","Arial Narrow Bold",Impact,system-ui,sans-serif;font-weight:900;letter-spacing:.02em;text-transform:uppercase;text-shadow:none;-webkit-text-stroke:3px #07070b;paint-order:stroke fill;pointer-events:none;z-index:2}.vsTeams.show{display:flex}.vsTeams div{font-size:clamp(28px,5.5vw,116px);max-width:44%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.winner{position:absolute;inset:0;display:none;align-items:center;justify-content:flex-start;text-align:center;font-family:Impact,Arial Black,sans-serif;font-size:clamp(44px,7vw,130px);text-transform:uppercase;color:#ffe76a;text-shadow:0 3px 0 #000,0 0 20px #ff7a00;padding-top:6%;pointer-events:none;z-index:3}.winner.show{display:flex;flex-direction:column}.winner small{color:#fff;font-size:.42em;text-shadow:0 0 14px #00d084;margin-top:.2em}
 .players{display:grid;grid-template-columns:1fr 1fr;gap:8px}.roster{border:1px solid #ffffff1e;border-radius:6px;background:#020403;overflow:hidden}.roster h2{margin:0;padding:10px 12px;border-bottom:1px solid #ffffff20;font-size:clamp(14px,1.5vw,21px)}table{width:100%;border-collapse:collapse}th,td{padding:7px 10px;border-bottom:1px solid #ffffff10;text-align:left;font-size:clamp(12px,1.2vw,17px)}th:nth-child(2),td:nth-child(2){text-align:center}.menu{position:fixed;right:12px;top:12px;z-index:999;width:58px;height:58px;border:1px solid #4da3ff66;border-radius:50%;background:linear-gradient(180deg,#1e90ff44,#0a245844);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:white;font-size:31px;box-shadow:0 8px 20px #0008,inset 0 1px 0 #ffffff33;pointer-events:auto}
 .controller{height:100vh;overflow:auto;background:#070911;padding:16px}.controlTop{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;background:#070911f2;padding:8px;z-index:20}.controlTop h2{font-size:clamp(34px,5vw,56px);margin:0}.controlTop div{display:flex;gap:10px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.card{background:linear-gradient(180deg,#151925f2,#060911f8);border:1px solid #ffffff1e;border-radius:14px;padding:16px;box-shadow:inset 0 1px 0 #ffffff22,0 12px 34px #0008}.card h3{font-size:28px;margin:0 0 14px}.btnGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{min-height:58px;border:1px solid #ffffff25;border-radius:12px;color:#fff;font-family:Impact,Arial Black,sans-serif;font-size:22px;text-transform:uppercase;box-shadow:inset 0 1px 0 #ffffff30,0 8px 18px #0007;transition:transform .08s ease,filter .12s ease,box-shadow .12s ease}.btn:active,.btn.flash{transform:translateY(2px) scale(.985);filter:brightness(1.12);box-shadow:inset 0 2px 0 #ffffff18,0 3px 10px #0009}.orange{background:linear-gradient(180deg,#ff8a00,#923400)}.blue{background:linear-gradient(180deg,#1e9bff,#003d91)}.green{background:linear-gradient(180deg,#22c55e,#11662d)}.red{background:linear-gradient(180deg,#ef4444,#7f1d1d)}.purple{background:linear-gradient(180deg,#a855f7,#581c87)}.yellow{background:linear-gradient(180deg,#facc15,#9a6500);color:#1b1200}.gray{background:linear-gradient(180deg,#374151,#111827)}label{display:block;font-weight:1000;margin:8px 0 6px}input,select{width:100%;border-radius:10px;border:1px solid #ffffff24;background:#0d1320;color:#fff;padding:10px;font-weight:800}.range{display:grid;grid-template-columns:1fr 62px;gap:10px;align-items:center;margin:8px 0}input[type=range]{accent-color:#1e90ff}output{text-align:right;font-size:22px;color:#ffe76a;font-family:Impact,Arial Black,sans-serif}.colors{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}.chip{height:42px;border:2px solid #ffffff55;border-radius:10px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#111827;border:1px solid #ffffff24;border-radius:999px;padding:10px 18px;display:none;font-weight:900;z-index:9999}.toast.show{display:block}
@@ -182,18 +182,36 @@ body[data-theme="sunset"] #themeSelect{border-color:#ff4d8d}
   opacity:0;
   z-index:1;
   pointer-events:none;
-  transform:scale(1);
+  transform:none;
 }
 .stage.videoMode .stageVideo{
   opacity:1;
-  animation:stageVideoPulseV74 3.74s ease-in-out infinite;
+  animation:none!important;
+  transform:none!important;
+  filter:none!important;
 }
 .stage.videoMode .stageBg{
   opacity:0!important;
 }
-@keyframes stageVideoPulseV74{
-  0%,100%{transform:scale(1);filter:brightness(1) contrast(1.03)}
-  50%{transform:scale(1.046);filter:brightness(1.115) contrast(1.104)}
+.vsCenterOverlay{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:min(69.3vw,693px);
+  max-width:84%;
+  opacity:0;
+  z-index:2;
+  pointer-events:none;
+  filter:drop-shadow(0 0 20px rgba(0,0,0,.45));
+}
+.stage.videoMode .vsCenterOverlay{
+  opacity:1;
+  animation:vsCenterPulseV111 2.8s ease-in-out infinite;
+}
+@keyframes vsCenterPulseV111{
+  0%,100%{transform:translate(-50%,-50%) scale(1);}
+  50%{transform:translate(-50%,-50%) scale(1.065);}
 }
 
 
@@ -862,6 +880,101 @@ button#swapBtn:not(.hide button){
 }
 
 
+
+/* v107: remove player info and expand remaining scoreboard areas */
+.scoreboard{
+  grid-template-rows:minmax(280px,42vh) minmax(0,1fr)!important;
+}
+.players{
+  display:none!important;
+}
+.top,.stage{
+  min-height:0!important;
+}
+.team{
+  padding-bottom:10px!important;
+}
+.clockPanel{
+  align-content:center!important;
+}
+.teamPlayerCompact{
+  grid-template-columns:1fr 1fr!important;
+}
+.compactPlayerRow,
+.playerInline,
+.compactTeamBtns{
+  display:none!important;
+}
+.cCard.teamPlayerCard{
+  padding-bottom:14px!important;
+}
+@media(max-width:720px){
+  .teamPlayerCompact{grid-template-columns:1fr!important}
+}
+
+
+/* v108: one continuous VS video behind entire scoreboard */
+.scoreboard{
+  position:relative!important;
+  overflow:hidden!important;
+}
+.scoreboardVideoBg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  opacity:0;
+  pointer-events:none;
+  z-index:0;
+  background:#000;
+  transition:opacity .22s ease;
+}
+.scoreboard.vsFullVideo .scoreboardVideoBg{
+  opacity:1;
+}
+.scoreboard.vsFullVideo .top,
+.scoreboard.vsFullVideo .stage{
+  position:relative;
+  z-index:1;
+}
+.scoreboard.vsFullVideo .panel,
+.scoreboard.vsFullVideo .stage{
+  background:rgba(0,0,0,.40)!important;
+  backdrop-filter:brightness(.9) contrast(1.05);
+}
+.scoreboard.vsFullVideo .clockBox{
+  background:rgba(0,0,0,.56)!important;
+}
+.scoreboard.vsFullVideo .stageVideo{
+  display:none!important;
+}
+.scoreboard.vsFullVideo .stageBg{
+  opacity:0!important;
+  background-image:none!important;
+}
+.scoreboard.vsFullVideo .stage{
+  background:transparent!important;
+}
+.scoreboard.vsFullVideo .vsTeams{
+  z-index:3!important;
+}
+
+
+/* v109: clip shared VS video to only the 4 scoreboard panels */
+.scoreboardVideoBg{
+  -webkit-mask-image:linear-gradient(#fff 0 0),linear-gradient(#fff 0 0),linear-gradient(#fff 0 0),linear-gradient(#fff 0 0)!important;
+  -webkit-mask-repeat:no-repeat!important;
+  -webkit-mask-size:var(--m1w,0px) var(--m1h,0px),var(--m2w,0px) var(--m2h,0px),var(--m3w,0px) var(--m3h,0px),var(--m4w,0px) var(--m4h,0px)!important;
+  -webkit-mask-position:var(--m1x,0px) var(--m1y,0px),var(--m2x,0px) var(--m2y,0px),var(--m3x,0px) var(--m3y,0px),var(--m4x,0px) var(--m4y,0px)!important;
+  mask-image:linear-gradient(#fff 0 0),linear-gradient(#fff 0 0),linear-gradient(#fff 0 0),linear-gradient(#fff 0 0)!important;
+  mask-repeat:no-repeat!important;
+  mask-size:var(--m1w,0px) var(--m1h,0px),var(--m2w,0px) var(--m2h,0px),var(--m3w,0px) var(--m3h,0px),var(--m4w,0px) var(--m4h,0px)!important;
+  mask-position:var(--m1x,0px) var(--m1y,0px),var(--m2x,0px) var(--m2y,0px),var(--m3x,0px) var(--m3y,0px),var(--m4x,0px) var(--m4y,0px)!important;
+}
+.scoreboard.vsFullVideo{background:#020403!important;}
+
 </style></head><body>
 <div id="toast" class="toast"></div>
 <section id="home" class="home">
@@ -917,18 +1030,20 @@ window.GDL_OPEN_PAGE=function(page){
 
 window.GDL_HOME_SCOREBOARD=function(){return window.GDL_OPEN_PAGE("scoreboard");};
 window.GDL_HOME_CONTROLLER=function(){return window.GDL_OPEN_PAGE("controller");};
+
+requestAnimationFrame(updateScoreboardVideoMask);
 </script>
 
 <section id="scoreboard" class="scoreboard hidden">
+  <video id="scoreboardVideoBg" class="scoreboardVideoBg" src="assets/vs-loop-v111.mp4" muted loop playsinline preload="auto"></video>
   <button class="menu" id="scoreMenuBtn" type="button" aria-label="Open controller">☰</button>
   <div class="top">
     <div class="panel team homeTeam" style="--c:#ff7a00"><div class="kicker">HOME</div><div id="hn" class="name">THUNDER</div><div id="hs" class="score">0</div><div id="hf" class="fouls">FOULS 0</div></div>
     <div class="panel clockPanel"><div class="clockBox"><div id="clock" class="clock">8:00</div></div><div class="period"><span id="periodLabel">PERIOD</span> <b id="period">1</b></div><div class="shot"><span id="shotLabel"></span><span id="shot">24</span></div></div>
     <div class="panel team awayTeam" style="--c:#1e90ff"><div class="kicker">AWAY</div><div id="an" class="name">DIAMONDS</div><div id="as" class="score">0</div><div id="af" class="fouls">FOULS 0</div></div>
   </div>
-  <div id="stage" class="stage"><div id="stageBg" class="stageBg"></div><video id="stageVideo" class="stageVideo" src="assets/vs-loop.mp4" autoplay muted loop playsinline preload="auto"></video><audio id="buzzSound" src="assets/buzz.mp3" preload="auto"></audio><audio id="gameOverSound" src="assets/gameover.mp3" preload="auto"></audio><div id="vs" class="vsTeams"><div id="vsh"></div><div id="vsa"></div></div><div id="winner" class="winner"></div></div>
-  <div class="players"><div class="roster"><h2>HOME PLAYERS</h2><table><thead><tr><th>PLAYER</th><th>#</th></tr></thead><tbody id="hp"></tbody></table></div><div class="roster"><h2>AWAY PLAYERS</h2><table><thead><tr><th>PLAYER</th><th>#</th></tr></thead><tbody id="ap"></tbody></table></div></div>
-</section>
+  <div id="stage" class="stage"><div id="stageBg" class="stageBg"></div><video id="stageVideo" class="stageVideo" src="assets/vs-loop-v111.mp4" autoplay muted loop playsinline preload="auto"></video><img id="vsCenterOverlay" class="vsCenterOverlay" src="assets/vs-overlay-v111.png" alt="VS overlay" /><audio id="buzzSound" src="assets/buzz.mp3" preload="auto"></audio><audio id="gameOverSound" src="assets/gameover.mp3" preload="auto"></audio><div id="vs" class="vsTeams"><div id="vsh"></div><div id="vsa"></div></div><div id="winner" class="winner"></div></div>
+  </section>
 
 <section id="controller" class="controller hidden">
  <div class="cBar">
@@ -965,20 +1080,16 @@ window.GDL_HOME_CONTROLLER=function(){return window.GDL_OPEN_PAGE("controller");
     </div>
 
     <div class="cCard teamPlayerCard">
-     <h3>Teams &amp; Players</h3>
+     <h3>Teams</h3>
      <div class="teamPlayerCompact">
       <div class="teamBox">
        <label class="cLabel">Home name</label><input id="hni" class="cInput" maxlength="18">
-       <label class="cLabel">Home player</label>
-       <div class="compactPlayerRow"><input id="homePlayerNameV101" class="cInput compactName" maxlength="32" placeholder="Player name"><input id="homePlayerNumV101" class="cInput compactNum" inputmode="numeric" maxlength="3" placeholder="#"><button class="ghostBtn go" id="addHomePlayerV101" type="button">Add</button></div>
       </div>
       <div class="teamBox">
        <label class="cLabel">Away name</label><input id="ani" class="cInput" maxlength="18">
-       <label class="cLabel">Away player</label>
-       <div class="compactPlayerRow"><input id="awayPlayerNameV101" class="cInput compactName" maxlength="32" placeholder="Player name"><input id="awayPlayerNumV101" class="cInput compactNum" inputmode="numeric" maxlength="3" placeholder="#"><button class="ghostBtn go" id="addAwayPlayerV101" type="button">Add</button></div>
       </div>
      </div>
-     <div class="rowBtns compactTeamBtns single"><button class="ghostBtn" id="clearPlayersBtn" type="button">Clear players</button></div>
+     
     </div>
 
     <div class="cCard sportThemeCard">
@@ -1013,7 +1124,7 @@ window.GDL_HOME_CONTROLLER=function(){return window.GDL_OPEN_PAGE("controller");
      <label class="toggleRow"><input type="checkbox" id="showShot" checked><span id="showShotLabel">Show shot clock</span></label>
      <div class="field" id="shotField"><span><span id="shotControlLabel">Shot clock</span> <b class="fieldval" id="shoto">24</b></span><input id="shotr" type="range" min="0" max="35"></div>
 
-     <div class="hide" aria-hidden="true">
+     <div class="hide" aria-hidden="true"><button id="clearPlayersBtn" type="button">Clear players</button>
       <button id="swapBtn" type="button">Swap</button>
       <select id="pside" class="cSelect"><option value="home">Home</option><option value="away">Away</option></select>
       <input id="pnum" class="cInput" inputmode="numeric" maxlength="3">
@@ -1029,7 +1140,7 @@ window.GDL_HOME_CONTROLLER=function(){return window.GDL_OPEN_PAGE("controller");
  </div>
 </section>
 <script>
-const VERSION="v106";
+const VERSION="v113";
 const FIREBASE_CONFIG={"apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA", "authDomain": "gameday-22.firebaseapp.com", "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com", "projectId": "gameday-22", "storageBucket": "gameday-22.firebasestorage.app", "messagingSenderId": "407561255571", "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66", "measurementId": "G-XG62G0G8DS"};
 const IMGS={"ready":"assets/ready-vs.jpg","timeout":"assets/timeout.png","three":"assets/3pointer.png","dunk":"assets/slamdunk.png","winner":"assets/winner.png"};
 
@@ -1111,8 +1222,8 @@ function buzzerThenGameOver(){
 const defaultState={homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,homeFouls:0,awayFouls:0,homeColor:"#ff8a1e",awayColor:"#19c8ff",clock:"8:00",period:1,shot:24,periodLength:"8:00",showShot:true,gameState:"ready",sport:"basketball",theme:"neon",winMode:"time",winScore:15,homePlayers:[],awayPlayers:[],event:null};
 let s=loadState();if(["court","diamond","pickle","volley"].includes(s.theme))s.theme="neon";
 function $(id){return document.getElementById(id)}
-function loadState(){try{for(const k of ["gameday-v106","gameday-v101","gameday-v100","gameday-v99","gameday-v95","gameday-v94","gameday-v93","gameday-v92","gameday-v91","gameday-v90","gameday-v89","gameday-v88"]){const cur=localStorage.getItem(k);if(cur)return {...defaultState,...JSON.parse(cur)}}return {...defaultState}}catch(e){return {...defaultState}}}
-function localSave(){localStorage.setItem("gameday-v106",JSON.stringify(s))}
+function loadState(){try{for(const k of ["gameday-v113","gameday-v101","gameday-v100","gameday-v99","gameday-v95","gameday-v94","gameday-v93","gameday-v92","gameday-v91","gameday-v90","gameday-v89","gameday-v88"]){const cur=localStorage.getItem(k);if(cur)return {...defaultState,...JSON.parse(cur)}}return {...defaultState}}catch(e){return {...defaultState}}}
+function localSave(){localStorage.setItem("gameday-v113",JSON.stringify(s))}
 function save(){localSave();render();if(roomRef&&firebaseOK)firebaseSet().catch(()=>{})}
 async function firebaseSet(){if(window.__fbdb)await window.__fbdb.set(roomRef,s)}
 async function connectFirebase(){if(firebaseOK)return;try{setConn("connecting");const appMod=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");const dbMod=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");const authMod=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");window.__fbdb=dbMod;app=appMod.initializeApp(FIREBASE_CONFIG);db=dbMod.getDatabase(app);auth=authMod.getAuth(app);await authMod.signInAnonymously(auth);roomRef=dbMod.ref(db,"gamedayLive/main");firebaseOK=true;setConn("live");if(unsub)unsub();unsub=dbMod.onValue(roomRef,snap=>{const v=snap.val();if(!v)return;const old=s.event&&s.event.id;s={...defaultState,...s,...v};localSave();render();if(s.event&&s.event.id!==old)handleEvent(s.event)});await dbMod.set(roomRef,s)}catch(e){setConn("local");console.warn("Firebase unavailable; local mode active",e)}}
@@ -1145,11 +1256,48 @@ function setSportDefaults(sport){
   else{s.shot=24;s.winMode="time";}
 }
 function render(){applyTeamColors();applySportTheme();const spec=sportSpec();paintTeams();$("hn").textContent=s.homeName;$("an").textContent=s.awayName;$("hs").textContent=s.homeScore;$("as").textContent=s.awayScore;$("hf").textContent="FOULS "+s.homeFouls;$("af").textContent="FOULS "+s.awayFouls;$("clock").textContent=s.clock;$("periodLabel").textContent=spec.period;$("period").textContent=s.period;$("shotLabel").textContent=spec.shotLabel;$("shot").textContent=s.shot;const ro=document.querySelector(".homeRO"),ra=document.querySelector(".awayRO");if(ro)ro.style.setProperty("--c",s.homeColor);if(ra)ra.style.setProperty("--c",s.awayColor);$("cHomeName").textContent=s.homeName;$("cAwayName").textContent=s.awayName;$("cHomeScore").textContent=s.homeScore;$("cAwayScore").textContent=s.awayScore;$("cClock").textContent=s.clock;$("cPeriodLabel").textContent=spec.period;$("cPeriodNum").textContent=s.period;$("sTagHome").textContent=s.homeName;$("sTagAway").textContent=s.awayName;if(document.activeElement!==$("hni"))$("hni").value=s.homeName;if(document.activeElement!==$("ani"))$("ani").value=s.awayName;const sec=parseClock(s.clock);$("min").value=Math.floor(sec/60);$("mino").textContent=Math.floor(sec/60);$("sec").value=sec%60;$("seco").textContent=String(sec%60).padStart(2,"0");$("periodLabelCtl").textContent=spec.period.charAt(0)+spec.period.slice(1).toLowerCase();$("pero").textContent=s.period;$("shotr").max=spec.shotMax;$("shotControlLabel").textContent=spec.shotControl;$("shotr").value=s.shot;$("shoto").textContent=s.shot;const _ss=s.showShot!==false;if($("showShotLabel"))$("showShotLabel").textContent="Show "+spec.shotControl.toLowerCase();if($("shotField"))$("shotField").style.display=_ss?"":"none";if($("showShot"))$("showShot").checked=_ss;const _sb=document.querySelector(".clockPanel .shot");if(_sb)_sb.style.display=_ss?"":"none";$("hfo").textContent=s.homeFouls;$("afo").textContent=s.awayFouls;$("winMode").value=s.winMode||"time";$("winScore").value=s.winScore||15;$("winScoreOut").textContent=s.winScore||15;$("winScoreRow").classList.toggle("hide",(s.winMode||"time")!=="score");if($("sportSelect"))$("sportSelect").value=s.sport||"basketball";if($("themeSelect"))$("themeSelect").value=s.theme||"neon";reflectRun();updateUndo();syncVs();renderPlayers()}
-function renderPlayers(){$("hp").innerHTML=s.homePlayers.length?s.homePlayers.map(p=>`<tr><td>${escapeHTML(p.name)}</td><td>${escapeHTML(p.num)}</td></tr>`).join(""):"";$("ap").innerHTML=s.awayPlayers.length?s.awayPlayers.map(p=>`<tr><td>${escapeHTML(p.name)}</td><td>${escapeHTML(p.num)}</td></tr>`).join(""):""}
+function renderPlayers(){}
 function escapeHTML(x){return String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function setStageImage(type){const bg=$("stageBg");const vid=$("stageVideo");if(vid){vid.pause();vid.currentTime=0}$("stage").classList.remove("videoMode");if(bg)bg.style.backgroundImage=`url("${IMGS[type]}")`;$("stage").classList.add("img")}
-function clearStage(){if(stageTimer){clearTimeout(stageTimer);stageTimer=null}const bg=$("stageBg");const vid=$("stageVideo");if(vid){vid.pause();vid.currentTime=0}if(bg)bg.style.backgroundImage="";$("stage").classList.remove("img","vsMode","videoMode");$("vs").classList.remove("show");$("winner").classList.remove("show")}
-function showVsVideo(teams=true){
+function setStageImage(type){scoreboardVideoOff();const bg=$("stageBg");const vid=$("stageVideo");if(vid){vid.pause();vid.currentTime=0}$("stage").classList.remove("videoMode");if(bg)bg.style.backgroundImage=`url("${IMGS[type]}")`;$("stage").classList.add("img")}
+function clearStage(){scoreboardVideoOff();if(stageTimer){clearTimeout(stageTimer);stageTimer=null}const bg=$("stageBg");const vid=$("stageVideo");if(vid){vid.pause();vid.currentTime=0}if(bg)bg.style.backgroundImage="";$("stage").classList.remove("img","vsMode","videoMode");$("vs").classList.remove("show");$("winner").classList.remove("show")}
+
+
+function updateScoreboardVideoMask(){
+  const board=$("scoreboard"), vid=$("scoreboardVideoBg");
+  if(!board||!vid) return;
+  const panels=[board.querySelector('.homeTeam'), board.querySelector('.clockPanel'), board.querySelector('.awayTeam'), $("stage")];
+  const b=board.getBoundingClientRect();
+  panels.forEach((el,i)=>{
+    if(!el) return;
+    const r=el.getBoundingClientRect();
+    board.style.setProperty(`--m${i+1}x`, `${Math.round(r.left-b.left)}px`);
+    board.style.setProperty(`--m${i+1}y`, `${Math.round(r.top-b.top)}px`);
+    board.style.setProperty(`--m${i+1}w`, `${Math.round(r.width)}px`);
+    board.style.setProperty(`--m${i+1}h`, `${Math.round(r.height)}px`);
+  });
+}
+window.addEventListener('resize', ()=>requestAnimationFrame(updateScoreboardVideoMask));
+window.addEventListener('orientationchange', ()=>setTimeout(updateScoreboardVideoMask,150));
+
+function scoreboardVideoOn(){
+  const board=$("scoreboard"), vid=$("scoreboardVideoBg");
+  if(board)board.classList.add("vsFullVideo"); requestAnimationFrame(updateScoreboardVideoMask);
+  if(vid){
+    vid.muted=true;
+    vid.loop=true;
+    vid.playsInline=true;
+    try{vid.currentTime=0}catch(e){}
+    const p=vid.play();
+    if(p&&p.catch)p.catch(()=>{});
+  }
+}
+function scoreboardVideoOff(){
+  const board=$("scoreboard"), vid=$("scoreboardVideoBg");
+  if(board)board.classList.remove("vsFullVideo");
+  if(vid){try{vid.pause();vid.currentTime=0}catch(e){}}
+}
+
+function showVsVideo(teams=true){scoreboardVideoOn();
   if(stageTimer){clearTimeout(stageTimer);stageTimer=null}
   $("winner").classList.remove("show");
   const bg=$("stageBg");
@@ -1183,7 +1331,7 @@ function showVsVideo(teams=true){
   requestAnimationFrame(fitVsNames);
 }
 function showImage(type,teams=false,temp=true){if(type==="ready"){showVsVideo(teams);return}if(stageTimer){clearTimeout(stageTimer);stageTimer=null}$("winner").classList.remove("show");setStageImage(type);$("stage").classList.toggle("vsMode",false);const cols=getVsColors(),hc=cols.home,ac=cols.away;$("vsh").textContent=s.homeName;$("vsa").textContent=s.awayName;$("vsh").setAttribute("data-text",s.homeName);$("vsa").setAttribute("data-text",s.awayName);$("vsh").style.color=hc;$("vsa").style.color=ac;$("vsh").style.setProperty("--vsTop",tint(hc,.34));$("vsh").style.setProperty("--vsMid",hc);$("vsh").style.setProperty("--vsBottom",hc);$("vsa").style.setProperty("--vsTop",tint(ac,.34));$("vsa").style.setProperty("--vsMid",ac);$("vsa").style.setProperty("--vsBottom",ac);$("vs").classList.toggle("show",teams);requestAnimationFrame(fitVsNames);if(temp){const dur=type==="three"?3000:(type==="dunk"?5000:5000);stageTimer=setTimeout(()=>{stageTimer=null;if(s.gameState!=="timeout"&&s.gameState!=="winner")blank()},dur)}}
-function blank(){clearStage();if(s.gameState!=="timeout"&&s.gameState!=="winner")s.gameState="playing";save()}
+function blank(){scoreboardVideoOff();clearStage();if(s.gameState!=="timeout"&&s.gameState!=="winner")s.gameState="playing";save()}
 function anim(type){s.event={type,id:Date.now()+"-"+Math.random()};handleEvent(s.event);save()}
 function handleEvent(e){if(!e||e.id===lastEvent)return;lastEvent=e.id;if(e.type==="three")showImage("three",false,true);if(e.type==="dunk")showImage("dunk",false,true);if(e.type==="timeout")showTimeout();if(e.type==="winner")showWinner(false)}
 
@@ -1262,57 +1410,5 @@ window.addEventListener("DOMContentLoaded",function(){
 
 
 
-
-<script>
-window.addEventListener("DOMContentLoaded",function(){
-  function by(id){return document.getElementById(id)}
-  function addCompactPlayer(side){
-    try{
-      const nameEl=by(side+"PlayerNameV101");
-      const numEl=by(side+"PlayerNumV101");
-      const name=(nameEl&&nameEl.value||"").trim();
-      const num=(numEl&&numEl.value||"").trim();
-      if(!name){ if(typeof toast==="function")toast("Enter player name"); return; }
-      const key=side==="home"?"homePlayers":"awayPlayers";
-      s[key]=Array.isArray(s[key])?s[key]:[];
-      s[key].push({name:name,num:num});
-      if(nameEl)nameEl.value="";
-      if(numEl)numEl.value="";
-      if(typeof save==="function")save();
-      if(typeof toast==="function")toast("Player added");
-    }catch(e){console.error(e)}
-  }
-  var h=by("addHomePlayerV101"), a=by("addAwayPlayerV101");
-  if(h)h.addEventListener("click",function(){addCompactPlayer("home")});
-  if(a)a.addEventListener("click",function(){addCompactPlayer("away")});
-
-  var pp=by("periodPreset");
-  if(pp){
-    pp.addEventListener("change",function(){
-      try{
-        s.periodLength=pp.value+":00";
-        s.clock=s.periodLength;
-        save();
-      }catch(e){console.error(e)}
-    });
-  }
-
-  var oldRender=window.render;
-  if(typeof oldRender==="function" && !window.__v101RenderWrapped){
-    window.__v101RenderWrapped=true;
-    window.render=function(){
-      var r=oldRender.apply(this,arguments);
-      try{
-        var pp=by("periodPreset");
-        if(pp && document.activeElement!==pp){
-          var mins=parseInt((s.periodLength||s.clock||"10:00").split(":")[0],10)||10;
-          pp.value=[5,10,15,20,25].indexOf(mins)>=0?String(mins):"10";
-        }
-      }catch(e){}
-      return r;
-    };
-  }
-});
-</script>
 
 </body></html>
