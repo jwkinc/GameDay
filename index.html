@@ -1,4 +1,14 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>GameDay Live</title><style>
+<!doctype html><html><head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#07131f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="GameDay Live">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>GameDay Live</title><style>
 *{box-sizing:border-box}html,body{margin:0;height:100%;background:#020305;color:white;font-family:system-ui,-apple-system,Segoe UI,sans-serif;overflow:hidden}button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
 .home{height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(rgba(4,9,18,.45),rgba(4,9,18,.60)),url("assets/login-bg.png") center center / cover no-repeat}.homeCard{width:min(900px,94vw);padding:clamp(28px,5vw,60px);border:1px solid #ffffff24;border-radius:24px;background:linear-gradient(180deg,rgba(16,23,37,.88),rgba(7,9,16,.92));backdrop-filter:blur(2px);text-align:center;box-shadow:0 30px 90px #000c}.badge{display:inline-block;padding:10px 22px;border:1px solid #ffffff30;border-radius:999px;background:#ffffff12;letter-spacing:.22em;font-weight:1000}h1{font-family:Impact,Arial Black,sans-serif;font-size:clamp(56px,8vw,110px);line-height:.9;margin:24px 0 12px}.home p{font-size:clamp(18px,2.4vw,28px);opacity:.84}.pin{width:min(520px,100%);margin:16px auto;text-align:left}.pin label{font-weight:1000}.pin input{width:100%;margin-top:8px;min-height:58px;border-radius:14px;border:1px solid #ffffff32;background:#0d1320;color:white;text-align:center;font-size:28px;font-weight:1000}.homeBtns{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}.homeBtns button{min-height:76px;border:0;border-radius:18px;color:white;font-family:Impact,Arial Black,sans-serif;font-size:clamp(24px,3vw,34px);box-shadow:inset 0 1px 0 #fff5,0 14px 34px #0009;text-transform:uppercase}.scoreBtn{background:linear-gradient(135deg,#ff7a00,#ff2f7a)}.ctrlBtnHome{background:linear-gradient(135deg,#1e90ff,#00d084)}
 .scoreboard{height:100vh;padding:10px;background:#020403;display:grid;grid-template-rows:minmax(224px,38vh) minmax(248px,40vh) minmax(110px,1fr);gap:12px}.top{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(150px,.72fr) minmax(0,1.08fr);gap:12px}.panel{position:relative;background:#030508f4;border:1px solid #ffffff1b;border-radius:6px;overflow:hidden}.team{display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;align-items:center;justify-items:center;padding:8px 10px 6px;color:var(--c)}.kicker{font-weight:1000;letter-spacing:.25em;color:#ddd;font-size:clamp(12px,1.2vw,20px)}.name{font-family:Impact,Arial Black,sans-serif;font-size:clamp(22px,3.4vw,60px);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96%;text-shadow:0 2px 0 #000,0 0 10px currentColor;margin-top:clamp(3px,.7vh,11px)}.score{font-family:Impact,Arial Black,sans-serif;font-size:min(24vw,29vh,460px);line-height:.75;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;align-self:center;width:100%;height:100%;text-shadow:0 0 5px currentColor,0 0 18px currentColor}.fouls{font-weight:1000;color:#fff;font-size:clamp(13px,1.35vw,20px);align-self:end;margin:6px 8px 4px}.homeTeam .fouls{justify-self:end}.awayTeam .fouls{justify-self:start}.clockPanel{display:grid;align-items:start;justify-items:center;padding:8px 10px 10px}.clockBox{width:96%;height:clamp(96px,14.5vh,168px);min-height:clamp(96px,14.5vh,168px);border:3px solid #fff;border-radius:4px;background:#000;display:flex;align-items:center;justify-content:center;margin-top:clamp(4px,.8vh,10px);padding:4px 8px}.clock{font-family:Impact,Arial Black,sans-serif;font-size:clamp(61px,7.63vw,144px);line-height:1;color:#fff;white-space:nowrap;transform:scaleX(.83);text-shadow:0 0 2px #ff4040,0 0 5px #ff4040}.period{display:flex;gap:.65em;align-items:baseline;margin-top:clamp(10px,1.4vh,18px);font-family:Impact,Arial Black,sans-serif;font-size:clamp(20px,2.4vw,38px)}.period b{color:#ff3030;text-shadow:0 0 5px #ff3030}.shot{margin-top:clamp(8px,1.2vh,14px);font-family:Impact,Arial Black,sans-serif;font-size:clamp(28px,3.4vw,56px);color:#ff3030;text-shadow:0 0 7px #ff3030}
@@ -186,9 +196,9 @@ body[data-theme="sunset"] #themeSelect{border-color:#ff4d8d}
 }
 .stage.videoMode .stageVideo{
   opacity:1;
-  animation:none!important;
-  transform:none!important;
-  filter:none!important;
+  animation:stageVideoPulseV114 4.2s ease-in-out infinite!important;
+  transform-origin:center center!important;
+  filter:brightness(1.02) contrast(1.02)!important;
 }
 .stage.videoMode .stageBg{
   opacity:0!important;
@@ -198,8 +208,8 @@ body[data-theme="sunset"] #themeSelect{border-color:#ff4d8d}
   left:50%;
   top:50%;
   transform:translate(-50%,-50%);
-  width:min(69.3vw,693px);
-  max-width:84%;
+  width:min(52vw,520px);
+  max-width:63%;
   opacity:0;
   z-index:2;
   pointer-events:none;
@@ -207,11 +217,19 @@ body[data-theme="sunset"] #themeSelect{border-color:#ff4d8d}
 }
 .stage.videoMode .vsCenterOverlay{
   opacity:1;
-  animation:vsCenterPulseV111 2.8s ease-in-out infinite;
+  animation:vsCenterPulseV114 3.4s ease-in-out infinite;
 }
-@keyframes vsCenterPulseV111{
+@keyframes vsCenterPulseV114{
   0%,100%{transform:translate(-50%,-50%) scale(1);}
-  50%{transform:translate(-50%,-50%) scale(1.065);}
+  50%{transform:translate(-50%,-50%) scale(1.028);}
+}
+@keyframes stageVideoPulseV114{
+  0%,100%{transform:scale(1);filter:brightness(1.02) contrast(1.02);}
+  50%{transform:scale(1.022);filter:brightness(1.06) contrast(1.05);}
+}
+@keyframes scoreboardBgPulseV114{
+  0%,100%{transform:scale(1);filter:brightness(1.01) contrast(1.01);}
+  50%{transform:scale(1.018);filter:brightness(1.05) contrast(1.04);}
 }
 
 
@@ -933,6 +951,8 @@ button#swapBtn:not(.hide button){
 }
 .scoreboard.vsFullVideo .scoreboardVideoBg{
   opacity:1;
+  animation:scoreboardBgPulseV114 4.2s ease-in-out infinite;
+  transform-origin:center center;
 }
 .scoreboard.vsFullVideo .top,
 .scoreboard.vsFullVideo .stage{
@@ -1140,7 +1160,7 @@ requestAnimationFrame(updateScoreboardVideoMask);
  </div>
 </section>
 <script>
-const VERSION="v113";
+const VERSION="v115";
 const FIREBASE_CONFIG={"apiKey": "AIzaSyAh0r98ejRFdiBhX-NSKkANckKLLnJ-BwA", "authDomain": "gameday-22.firebaseapp.com", "databaseURL": "https://gameday-22-default-rtdb.firebaseio.com", "projectId": "gameday-22", "storageBucket": "gameday-22.firebasestorage.app", "messagingSenderId": "407561255571", "appId": "1:407561255571:web:57f8a867bbc5a560dc6b66", "measurementId": "G-XG62G0G8DS"};
 const IMGS={"ready":"assets/ready-vs.jpg","timeout":"assets/timeout.png","three":"assets/3pointer.png","dunk":"assets/slamdunk.png","winner":"assets/winner.png"};
 
@@ -1222,8 +1242,8 @@ function buzzerThenGameOver(){
 const defaultState={homeName:"THUNDER",awayName:"DIAMONDS",homeScore:0,awayScore:0,homeFouls:0,awayFouls:0,homeColor:"#ff8a1e",awayColor:"#19c8ff",clock:"8:00",period:1,shot:24,periodLength:"8:00",showShot:true,gameState:"ready",sport:"basketball",theme:"neon",winMode:"time",winScore:15,homePlayers:[],awayPlayers:[],event:null};
 let s=loadState();if(["court","diamond","pickle","volley"].includes(s.theme))s.theme="neon";
 function $(id){return document.getElementById(id)}
-function loadState(){try{for(const k of ["gameday-v113","gameday-v101","gameday-v100","gameday-v99","gameday-v95","gameday-v94","gameday-v93","gameday-v92","gameday-v91","gameday-v90","gameday-v89","gameday-v88"]){const cur=localStorage.getItem(k);if(cur)return {...defaultState,...JSON.parse(cur)}}return {...defaultState}}catch(e){return {...defaultState}}}
-function localSave(){localStorage.setItem("gameday-v113",JSON.stringify(s))}
+function loadState(){try{for(const k of ["gameday-v115","gameday-v101","gameday-v100","gameday-v99","gameday-v95","gameday-v94","gameday-v93","gameday-v92","gameday-v91","gameday-v90","gameday-v89","gameday-v88"]){const cur=localStorage.getItem(k);if(cur)return {...defaultState,...JSON.parse(cur)}}return {...defaultState}}catch(e){return {...defaultState}}}
+function localSave(){localStorage.setItem("gameday-v115",JSON.stringify(s))}
 function save(){localSave();render();if(roomRef&&firebaseOK)firebaseSet().catch(()=>{})}
 async function firebaseSet(){if(window.__fbdb)await window.__fbdb.set(roomRef,s)}
 async function connectFirebase(){if(firebaseOK)return;try{setConn("connecting");const appMod=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");const dbMod=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");const authMod=await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");window.__fbdb=dbMod;app=appMod.initializeApp(FIREBASE_CONFIG);db=dbMod.getDatabase(app);auth=authMod.getAuth(app);await authMod.signInAnonymously(auth);roomRef=dbMod.ref(db,"gamedayLive/main");firebaseOK=true;setConn("live");if(unsub)unsub();unsub=dbMod.onValue(roomRef,snap=>{const v=snap.val();if(!v)return;const old=s.event&&s.event.id;s={...defaultState,...s,...v};localSave();render();if(s.event&&s.event.id!==old)handleEvent(s.event)});await dbMod.set(roomRef,s)}catch(e){setConn("local");console.warn("Firebase unavailable; local mode active",e)}}
@@ -1410,5 +1430,14 @@ window.addEventListener("DOMContentLoaded",function(){
 
 
 
+
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("./sw.js").catch(function () {});
+  });
+}
+</script>
 
 </body></html>
