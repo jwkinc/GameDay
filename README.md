@@ -1,27 +1,15 @@
-# ITravel_54 — No-Cache Verified Build
+# 54th Street Field Travel Map — Transparent Header PWA
 
-This build adds a visible red badge in the lower-left corner:
-
-`ITravel_54 VERIFIED BUILD 2026-06-26`
-
-If you do not see that badge on PC after uploading to GitHub Pages, the browser or GitHub Pages is not serving the new files yet.
-
-This build also disables stale service-worker caching and keeps:
-- CRV garage option
-- Nearby removed
-- 2x2 readable travel/weather cards
-- Route buttons together in one row
+This GitHub Pages PWA version:
+- Centers the garage panel on phone/tablet screens
+- Uses SATX for the San Antonio market label
+- Removes the boxes behind the time, temperature, and forecast header info
 
 ## Upload
-Upload the CONTENTS of this ZIP to the repo root. Do not upload the ZIP file itself.
+Upload all files and folders from this ZIP into the root of your GitHub repo.
 
-## After upload
-On PC, hard refresh:
-- Windows: Ctrl + F5
-- Mac: Cmd + Shift + R
+## GitHub Pages
+Settings → Pages → Deploy from a branch → `main` → `/root`.
 
-On Android installed app:
-- remove the old home-screen app
-- open the GitHub Pages URL in Chrome
-- reload once
-- install again
+## Install on phone
+Open the GitHub Pages URL on Android Chrome and choose **Install app** or **Add to Home screen**.

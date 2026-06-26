@@ -1,8 +1,8 @@
 {
-  "name": "ITravel_54",
-  "short_name": "ITravel_54",
-  "description": "ITravel_54 app build itravel54-fixed-20260626-001",
-  "start_url": "./index.html?v=verified-20260626",
+  "name": "54th Street Field Travel Map",
+  "short_name": "54 Field Map",
+  "description": "54th Street store map, routes, weather, nearby places, notes, action items, and store photos.",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
@@ -26,6 +26,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "id": "/ITravel_54/"
+  ]
 }
